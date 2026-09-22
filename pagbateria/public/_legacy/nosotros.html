@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nosotros - CambiaTuBateria</title>
+  <meta name="description" content="Conoce nuestra misión y visión en CambiaTuBateria" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-grid">
+      <button class="mobile-menu-button" id="mobileMenuToggle" aria-label="Abrir menú" aria-controls="mobileMenu" aria-expanded="false">☰</button>
+      <nav class="nav-left"></nav>
+      <div class="brand center">
+        <img class="brand-logo brand-mini" src="./assets/img/logos/logo_autotraders.png" alt="CambiaTuBateria" />
+        <span class="brand-title">CambiaTuBateria</span>
+      </div>
+      <nav class="nav-right">
+        <a class="cart-btn" href="#carrito" aria-label="Carrito">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-badge">0</span>
+        </a>
+      </nav>
+    </div>
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true"></div>
+  </header>
+
+  <main>
+    <section class="about-hero">
+      <div class="container">
+        <h1 id="aboutTitle">Nuestra Misión y Visión</h1>
+        <p id="aboutSubtitle">Trabajamos para que reemplazar tu batería sea <strong>rápido, seguro y sin estrés</strong>. Construimos relaciones de confianza con soluciones de calidad y servicio cercano.</p>
+      </div>
+    </section>
+
+    <section class="about container">
+      <div class="about-grid">
+        <!-- Misión -->
+        <article class="about-card dark">
+          <header class="about-head">
+            <div class="about-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M3 9l9-7 9 7v9a3 3 0 01-3 3H6a3 3 0 01-3-3V9z" stroke="#ffffff" stroke-width="1.8" fill="none"/>
+              </svg>
+            </div>
+            <h3>Misión</h3>
+          </header>
+          <p id="missionText">Ofrecer el <strong>mejor servicio de reemplazo de baterías</strong> con asesoría especializada, instalación a domicilio y productos de calidad, cuidando el tiempo y la seguridad de nuestros clientes.</p>
+          <ul id="missionList" class="about-list">
+            <li>
+              <span class="check">✔</span>
+              <span><strong>Atención rápida</strong> y a domicilio.</span>
+            </li>
+            <li>
+              <span class="check">✔</span>
+              <span>Marcas y baterías <strong>premium</strong>.</span>
+            </li>
+            <li>
+              <span class="check">✔</span>
+              <span>Garantía real y soporte <strong>24/7</strong>.</span>
+            </li>
+          </ul>
+        </article>
+
+        <!-- Visión -->
+        <article class="about-card light">
+          <header class="about-head">
+            <div class="about-icon eye">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z" stroke="#111827" stroke-width="1.8" fill="none"/>
+                <circle cx="12" cy="12" r="3" fill="#111827"/>
+              </svg>
+            </div>
+            <h3>Visión</h3>
+          </header>
+          <p id="visionText">Ser la <strong>referencia líder</strong> en soluciones de energía automotriz en la región, expandiendo nuestra red con la mejor experiencia de servicio y tecnología.</p>
+          <div class="about-cols">
+            <ul id="visionListLeft" class="about-list muted"></ul>
+            <ul id="visionListRight" class="about-list muted"></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Experiencia Premium · Email: ventas@cambiatubateria.com · Teléfono: +52 55 1234 5678</p>
+      <p>© 2025 CambiarTuBateria. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="./assets/js/app.js" type="module"></script>
+</body>
+</html>

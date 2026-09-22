@@ -1,0 +1,26 @@
+{
+  "name": "cambiatubateria-geolocation",
+  "version": "1.0.0",
+  "description": "Módulo de geolocalización GPS para CambiaTuBatería Perú — auxilio, venta e instalación de baterías a domicilio.",
+  "type": "module",
+  "main": "geolocation-module.js",
+  "scripts": {
+    "test": "node --test",
+    "check:live": "node scripts/live-check.js",
+    "serve": "php -S 127.0.0.1:8000 -t . scripts/dev-router.php",
+    "test:e2e": "playwright test",
+    "audit:a11y": "node scripts/a11y-audit.js"
+  },
+  "keywords": [
+    "geolocation",
+    "gps",
+    "whatsapp",
+    "delivery"
+  ],
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1"
+  }
+}

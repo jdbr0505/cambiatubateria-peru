@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel Administrativo - CambiaTuBateria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Libre+Franklin:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/adminbateria/assets/css/styles.css?v=6" />
+</head>
+<body>
+  <header class="admin-topbar">
+    <div class="topbar-inner container">
+      <div class="brand">
+        <button id="btnMenu" class="hamburger" aria-label="Abrir menú" type="button">☰</button>
+        <div class="brand-logo">
+          <img id="topLogo" alt="CambiaTuBatería" src="/pagbateria/public/assets/img/icons/nav-logo.png" />
+        </div>
+
+  <!-- Overlay para menú en móviles -->
+  <div id="menuOverlay" class="menu-overlay" style="display:none"></div>
+
+  <!-- Modal seleccionar vehículos para nuevo producto -->
+  <div id="modalPickVehicles" class="modal" role="dialog" aria-modal="true" aria-labelledby="pvTitle" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:800px">
+      <div class="modal-header">
+        <h4 id="pvTitle">Seleccionar vehículos</h4>
+        <button type="button" class="btn sm" id="pvClose">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="row" style="gap:8px;align-items:flex-end">
+          <label>Marca
+            <input id="pvFilterBrand" type="text" placeholder="BMW" />
+          </label>
+          <label>Modelo
+            <input id="pvFilterModel" type="text" placeholder="Serie 3" />
+          </label>
+          <label>Año
+            <input id="pvFilterYear" type="number" placeholder="2018" />
+          </label>
+          <button class="btn" id="pvSearch" type="button">Buscar</button>
+        </div>
+        <div id="pvList" class="grid" style="margin-top:8px"></div>
+        <div class="muted" id="pvStatus" style="margin-top:6px"></div>
+      </div>
+      <div class="modal-footer actions">
+        <button class="btn" id="pvCancel" type="button">Cancelar</button>
+        <button class="btn primary" id="pvApply" type="button">Aplicar selección</button>
+      </div>
+    </div>
+  </div>
+        <div class="brand-name" id="topBrandName">CambiaTuBateria</div>
+      </div>
+      <div class="env" id="headerControls">
+        <small class="muted">API Conectada:</small>
+        <code id="apiBase">/adminbateria/backend/api</code>
+        <button class="btn sm" id="btnPing">Probar Conexión BD</button>
+        <span class="status" id="pingStatus"></span>
+        <button class="btn sm" id="btnLogout" style="margin-left:8px">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout container">
+    <aside class="side-nav" aria-label="Navegación de configuración">
+      <h2>Configuración</h2>
+      <div id="drawerControls" class="drawer-controls"></div>
+      <nav>
+        <a href="?p=sitio" data-tab="sitio" class="active"><span>logo-titulo</span></a>
+        <a href="?p=hero" data-tab="hero"><span>pasarela</span></a>
+        <a href="?p=whatsapp" data-tab="whatsapp"><span>WhatsApp</span></a>
+        <a href="?p=servicios" data-tab="servicios"><span>Servicios</span></a>
+        <a href="?p=productos" data-tab="productos"><span>Productos</span></a>
+        <a href="?p=asociados" data-tab="asociados"><span>Vehículos</span></a>
+        <a href="?p=fotos" data-tab="fotos"><span>Fotos</span></a>
+        <a href="?p=marcas" data-tab="marcas"><span>Marcas</span></a>
+        <a href="?p=contacto" data-tab="contacto"><span>Ubicación</span></a>
+        <a href="?p=nosotros" data-tab="nosotros"><span>Nosotros</span></a>
+        <a href="?p=cabeceras" data-tab="cabeceras"><span>Cabeceras</span></a>
+        <a href="?p=cobertura" data-tab="cobertura"><span>Cobertura</span></a>
+        <a href="?p=usuario" data-tab="usuario"><span>Usuario</span></a>
+      </nav>
+    </aside>
+
+    <main class="content">
+    <!-- 1) Encabezado del sitio (Branding y Metadatos) -->
+    <section id="tab-sitio" class="tab active">
+      <!-- Encabezado del sitio: Branding y Metadatos -->
+      <div class="card">
+        <h3>Encabezado del sitio (Branding)</h3>
+        <p class="muted" style="margin:0 0 12px">
+          Nombre y logo se reflejan en el menú y el pie de las 9 páginas con
+          navegación del sitio real.
+        </p>
+        <div class="brand-layout">
+          <div class="brand-form form-grid">
+            <label>Nombre de la marca (se muestra en el encabezado)
+              <input id="siteBrandName" type="text" />
+            </label>
+
+            <label class="span-2">Logo del sitio (ruta pública)
+              <input id="siteLogoFile" type="text" placeholder="/pagbateria/public/assets/img/logos/logo.png" />
+            </label>
+          </div>
+
+          <div class="brand-preview">
+            <div class="preview-wrap">
+              <img id="siteLogoPreview" alt="Vista previa del logo" src="" />
+            </div>
+            <div class="preview-actions">
+              <button class="btn" id="btnSiteUploadLogo">Subir/Reemplazar Logo</button>
+              <input id="inputSiteLogo" type="file" accept="image/*" style="display:none" />
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnSaveSite">Guardar</button>
+          <span id="siteStatus" class="status"></span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 12) Usuario -->
+    <section id="tab-usuario" class="tab">
+      <div class="card">
+        <h3>Usuarios</h3>
+        <div class="form-grid">
+          <label>Nombre
+            <input id="usNombre" type="text" placeholder="Nombre y Apellido" />
+          </label>
+          <label>Usuario
+            <input id="usUsername" type="text" placeholder="usuario" />
+          </label>
+          <label>Email
+            <input id="usEmail" type="email" placeholder="correo@dominio.com" />
+          </label>
+          <label>Rol
+            <select id="usRol">
+              <option value="admin">admin</option>
+              <option value="editor">editor</option>
+              <option value="tecnico">tecnico</option>
+            </select>
+          </label>
+          <label>Contraseña
+            <input id="usPassword" type="password" placeholder="********" autocomplete="new-password" />
+          </label>
+          <label>Activo
+            <input id="usActivo" type="checkbox" checked />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnAddUser">Agregar usuario</button>
+          <span id="usAddStatus" class="status"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Listado de usuarios</h3>
+        <div id="usersGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- Modal asociar productos a vehículo -->
+    <div class="modal" id="modalAssociate" style="display:none">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h4 id="assocModalTitle">Asociar productos</h4>
+          <button type="button" class="btn sm" id="assocClose">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="row" style="gap:8px;align-items:flex-end">
+            <label>Marca
+              <select id="assocBrandSel"></select>
+            </label>
+            <label style="flex:1">Buscar
+              <input id="assocSearch" type="text" placeholder="Nombre de producto" />
+            </label>
+            <button class="btn" id="assocRefresh" type="button">Refrescar</button>
+          </div>
+          <div id="assocList" class="grid" style="margin-top:8px"></div>
+          <div class="muted" id="assocStatus" style="margin-top:6px"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" id="assocCancel" type="button">Cancelar</button>
+          <button class="btn primary" id="assocSave" type="button">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    
+
+    <!-- 2) Hero (portada de Inicio) -->
+    <section id="tab-hero" class="tab">
+      <div class="card">
+        <h3>Hero — portada de Inicio</h3>
+        <p class="muted" style="margin:0 0 12px">
+          Es uno solo, no un carrusel. La foto de fondo se sube desde la
+          pestaña "Fotos". El botón de "Enviar mi ubicación" (GPS) se quitó
+          del sitio — WhatsApp es ahora el único canal de contacto.
+        </p>
+        <div class="form-grid">
+          <label class="span-2">Badge (arriba del título)
+            <input id="heroBadge" type="text" />
+          </label>
+          <label class="span-2">Título — <strong>si lo cambiás, se pierde el salto de línea del título de hoy</strong>
+            <input id="heroTitulo" type="text" placeholder="Dejar vacío para conservar el título con formato de hoy" />
+          </label>
+          <label class="span-2">Bajada
+            <input id="heroBajada" type="text" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnSaveHero">Guardar</button>
+          <span id="heroStatus" class="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) WhatsApp -->
+    <section id="tab-whatsapp" class="tab">
+      <div class="card">
+        <h3>WhatsApp</h3>
+        <p class="muted" style="margin:0 0 12px">
+          Un solo número — es el que usan los ~80 botones "Llamar"/"WhatsApp"
+          de todo el sitio público, más el botón de auxilio.
+        </p>
+        <div class="row">
+          <label>Número (solo dígitos, con código de país, sin +)
+            <input id="waNumero" type="text" placeholder="51936956877" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnSaveWhatsApp">Guardar WhatsApp</button>
+          <span id="waStatus" class="status"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Asesores (selector del botón flotante)</h3>
+        <p class="muted" style="margin:0 0 12px">
+          Opcional. Con 2 o más asesores activos, el botón flotante de
+          WhatsApp deja de ser un link directo y abre un selector para que
+          el visitante elija con quién hablar (nombre + rol). Con 0 o 1, el
+          botón se queda como siempre — link directo al número de arriba.
+        </p>
+        <div id="waAsesoresGrid" class="grid"></div>
+        <div class="row" style="margin-top:12px">
+          <label>Nombre
+            <input id="waAsesorNombre" type="text" placeholder="Sebastián Moreno" />
+          </label>
+          <label>Rol
+            <input id="waAsesorRol" type="text" placeholder="Asesor comercial" />
+          </label>
+          <label>Número (solo dígitos, con código de país)
+            <input id="waAsesorNumero" type="text" placeholder="51936956877" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="btn" id="btnAddAsesor">+ Agregar asesor</button>
+          <span id="waAsesoresStatus" class="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) Servicios -->
+    <section id="tab-servicios" class="tab">
+      <div class="card">
+        <h3>Servicios</h3>
+        <p class="muted" style="margin:0 0 12px">
+          Título y descripción de las 6 cards de servicios.html. El ícono de
+          cada una es fijo (SVG propio), no se edita desde acá.
+        </p>
+        <div id="serviciosGrid" class="grid"></div>
+        <div class="actions">
+          <span id="serviciosStatus" class="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5) Productos -->
+    <section id="tab-productos" class="tab">
+      <div class="card">
+        <h3>Registrar nuevo producto</h3>
+        <div class="row">
+          <label>Nombre
+            <input id="prodName" type="text" />
+          </label>
+          <label>Marca
+            <select id="prodBrand"></select>
+          </label>
+          <label>Precio
+            <input id="prodPrice" type="number" step="0.01" />
+          </label>
+          <label>CCA
+            <input id="prodCca" type="number" />
+          </label>
+          <label>Capacidad (Ah)
+            <input id="prodCapacity" type="number" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Tipo
+            <input id="prodType" type="text" />
+          </label>
+          <label>Largo (mm)
+            <input id="prodLen" type="number" />
+          </label>
+          <label>Ancho (mm)
+            <input id="prodWid" type="number" />
+          </label>
+          <label>Alto (mm)
+            <input id="prodHei" type="number" />
+          </label>
+          <label>Peso (kg)
+            <input id="prodWeight" type="number" step="0.01" />
+          </label>
+          <label>Polaridad
+            <input id="prodPolarity" type="text" placeholder="+ - / - +" />
+          </label>
+        </div>
+        <label>Descripción
+          <textarea id="prodDesc"></textarea>
+        </label>
+        <div class="row">
+          <label>Imágenes de producto
+            <input id="prodImages" type="file" accept="image/*" multiple />
+          </label>
+          <button class="btn danger" id="btnPickVehicles" type="button"><strong>Seleccionar vehículos</strong></button>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnCreateProduct">Crear Producto</button>
+          <span id="prodStatus" class="status"></span>
+        </div>
+      </div>
+      
+      <!-- Descuento (dentro de Productos, arriba de Listado) -->
+      <div class="card">
+        <h3>Descuento</h3>
+        <div class="form-grid">
+          <label class="span-2">Descuento por dejar batería (coreDiscount)
+            <input id="siteCoreDiscount2" type="number" />
+          </label>
+          <label class="span-2">Texto tras el monto (se ve como "−S/ 50.00 &lt;este texto&gt;" en cada tarjeta)
+            <input id="siteCoreDiscountTexto2" type="text" maxlength="255" placeholder="entregando tu batería usada" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnSaveDiscount" type="button">Guardar</button>
+          <span id="discStatus2" class="status"></span>
+        </div>
+      </div>
+
+
+      <!-- Listado dentro de Productos -->
+      <div class="card">
+        <h3>Listado de productos</h3>
+        <div class="row">
+          <label>Marca
+            <select id="listBrand2"></select>
+          </label>
+          <button class="btn" id="btnListSearch2">Buscar</button>
+          <button class="btn" id="btnListRefresh2" type="button" style="background: var(--success); border-color:#15803d; color:#fff">Actualizar</button>
+        </div>
+        <div id="productsGrid2" class="grid"></div>
+      </div>
+
+    </section>
+
+    <!-- 7) Listado (movido debajo de Productos) -->
+    <section id="tab-listado" class="tab">
+      <div class="card">
+        <h3>Listado</h3>
+        <div class="row">
+          <label>Marca
+            <select id="listBrand"></select>
+          </label>
+          <button class="btn" id="btnListSearch">Buscar</button>
+        </div>
+        <div id="productsGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- 6) Descuento -->
+    <section id="tab-ajustes" class="tab">
+      <div class="card">
+        <h3>Descuento</h3>
+        <div class="form-grid">
+          <label class="span-2">Descuento por dejar batería (coreDiscount)
+            <input id="siteCoreDiscount" type="number" />
+          </label>
+          <label class="span-2">Texto tras el monto (se ve como "−S/ 50.00 &lt;este texto&gt;" en cada tarjeta)
+            <input id="siteCoreDiscountTexto" type="text" maxlength="255" placeholder="entregando tu batería usada" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnSaveSite">Guardar</button>
+        </div>
+      </div>
+    </section>
+
+    
+
+    <!-- 7.1) Vehículos asociados -->
+    <section id="tab-asociados" class="tab">
+      <div class="card">
+        <h3>Crear vehículos asociados</h3>
+        <!-- Compatibilidad por vehículo (crear catálogo) -->
+        <div class="card" style="margin-bottom:12px">
+          <h3>Compatibilidad por vehículo</h3>
+          <div class="actions">
+            <button class="btn primary" id="btnSaveFit" type="button">Guardar vehículo</button>
+            <span id="fitStatus" class="status"></span>
+          </div>
+          <div id="fitList" class="grid"></div>
+          <div class="row">
+            <button class="btn" id="btnAddFit" type="button">+ Agregar compatibilidad</button>
+          </div>
+        </div>
+        <div class="row">
+          <label>Marca
+            <input id="assocFilterBrand" type="text" placeholder="BMW" />
+          </label>
+          <label>Modelo
+            <input id="assocFilterModel" type="text" placeholder="Serie 3" />
+          </label>
+          <label>Año
+            <input id="assocFilterYear" type="number" placeholder="2018" />
+          </label>
+          <button class="btn" id="btnAssocSearch">Buscar</button>
+        </div>
+        <div id="assocGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- 8) Fotos de página -->
+    <section id="tab-fotos" class="tab">
+      <div class="card">
+        <h3>Fotos de página</h3>
+        <p class="muted" style="margin:0 0 12px">
+          Reemplaza las fotos que se ven hoy en el sitio público. Al subir una
+          nueva, el sitio la muestra en la próxima visita — no hace falta
+          tocar código ni volver a desplegar.
+        </p>
+        <div class="row">
+          <button class="btn" id="btnFotosRefresh" type="button">Actualizar</button>
+          <span id="fotosStatus" class="status"></span>
+        </div>
+        <div id="fotosGrid" style="margin-top:12px;display:flex;flex-direction:column;gap:14px"></div>
+      </div>
+    </section>
+
+    <!-- 9) Marcas -->
+    <section id="tab-marcas" class="tab">
+      <div class="card">
+        <h3>Marcas</h3>
+        <div class="row">
+          <label>Nombre de marca
+            <input id="brandName" type="text" />
+          </label>
+          <label>Logo de marca
+            <input id="brandFile" type="file" accept="image/*" />
+          </label>
+          <button class="btn" id="btnAddBrand">Agregar</button>
+          <span id="brandStatus" class="status"></span>
+        </div>
+        <div id="brandGrid" class="brand-grid"></div>
+        <div class="actions">
+          <button class="btn primary" id="btnSaveBrandOrder">Guardar orden</button>
+          <span id="brandOrderStatus" class="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10) Nuestra Ubicación -->
+    <section id="tab-contacto" class="tab">
+      <div class="card">
+        <h3>Nuestra Ubicación</h3>
+        <div class="grid">
+          <label>Dirección
+            <input id="ctAddress" type="text" />
+          </label>
+          <label>URL de Mapa
+            <input id="ctMapUrl" type="text" />
+          </label>
+          <label>RUC
+            <input id="ctPhone" type="text" />
+          </label>
+          <label>Email
+            <input id="ctEmail" type="email" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Horario (Lun–Vie)
+            <input id="ctWeekdays" type="text" placeholder="8:00 AM - 7:00 PM" />
+          </label>
+          <label>Horario (Sábado)
+            <input id="ctSaturday" type="text" placeholder="8:00 AM - 5:00 PM" />
+          </label>
+          <label>Horario (Domingo)
+            <input id="ctSunday" type="text" placeholder="Cerrado" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnSaveContact">Guardar Contacto</button>
+          <span id="contactStatus" class="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11) Nosotros -->
+    <section id="tab-nosotros" class="tab">
+      <div class="card">
+        <h3>Nosotros</h3>
+        <p class="muted" style="margin:0 0 12px">
+          Título y bajada de la portada y de "El equipo" (la descripción del
+          negocio), las 2 secciones que tiene nosotros.html.
+        </p>
+        <div class="form-grid">
+          <label>Título — Portada
+            <input id="aboutHeroTitulo" type="text" placeholder="Técnicos, no repartidores" />
+          </label>
+          <label class="span-2">Bajada — Portada
+            <textarea id="aboutHeroBajada" placeholder="Quien llega sabe medir el alternador..."></textarea>
+          </label>
+
+          <label>Título — El equipo
+            <input id="aboutEquipoTitulo" type="text" placeholder="Técnicos certificados, no un chico en moto" />
+          </label>
+          <label class="span-2">Bajada — El equipo
+            <textarea id="aboutEquipoBajada" placeholder="Cada uno sabe diagnosticar antes de vender..."></textarea>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="btnSaveAbout">Guardar</button>
+          <span id="aboutStatus" class="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cabeceras de página: título/bajada de las 4 páginas que no tienen
+         pestaña propia (Inicio → pestaña "pasarela"; Nosotros → pestaña
+         "Nosotros"). -->
+    <section id="tab-cabeceras" class="tab">
+      <div class="card">
+        <h3>Cabeceras de página</h3>
+        <p class="muted" style="margin:0 0 12px">
+          Título y bajada del encabezado oscuro de Catálogo, Servicios,
+          Cobertura y Contacto, más 3 bloques de texto intermedios. Inicio
+          (portada) se edita en "pasarela" y Nosotros en su propia pestaña.
+        </p>
+        <div class="form-grid">
+          <label>Título — Catálogo
+            <input id="cabCatalogoTitulo" type="text" placeholder="Baterías con instalación incluida" />
+          </label>
+          <label class="span-2">Bajada — Catálogo
+            <input id="cabCatalogoBajada" type="text" placeholder="Todos los precios incluyen traslado e instalación..." />
+          </label>
+
+          <label>Título — Servicios
+            <input id="cabServiciosTitulo" type="text" placeholder="Todo lo que hacemos, donde estés" />
+          </label>
+          <label class="span-2">Bajada — Servicios
+            <input id="cabServiciosBajada" type="text" placeholder="No solo vendemos baterías..." />
+          </label>
+
+          <label>Título — Cobertura
+            <input id="cabCoberturaTitulo" type="text" placeholder="Lima Metropolitana y Callao" />
+          </label>
+          <label class="span-2">Bajada — Cobertura
+            <input id="cabCoberturaBajada" type="text" placeholder="Estos son los distritos donde llegamos..." />
+          </label>
+
+          <label>Título — Contacto
+            <input id="cabContactoTitulo" type="text" placeholder="Hablemos" />
+          </label>
+          <label class="span-2">Bajada — Contacto
+            <input id="cabContactoBajada" type="text" placeholder="Atendemos por teléfono y WhatsApp." />
+          </label>
+
+          <label>Título — Servicios, "Cómo trabajamos"
+            <input id="cabServiciosTrabajoTitulo" type="text" placeholder="El mismo técnico diagnostica, instala y se lleva la usada" />
+          </label>
+          <label class="span-2">Bajada — Servicios, "Cómo trabajamos"
+            <input id="cabServiciosTrabajoBajada" type="text" placeholder="Nada se coordina por partes..." />
+          </label>
+
+          <label class="span-2">Inicio — franja "Sin sorpresas" (una sola línea, sin bajada)
+            <input id="cabInicioFranjaTitulo" type="text" placeholder="Baterías 100% originales, instaladas donde estés y con garantía real." />
+          </label>
+
+          <label>Título — Inicio, "Nuestro catálogo"
+            <input id="cabInicioCatalogoTitulo" type="text" placeholder="Baterías para cada vehículo" />
+          </label>
+          <label class="span-2">Bajada — Inicio, "Nuestro catálogo"
+            <input id="cabInicioCatalogoBajada" type="text" placeholder="Marcas Etna, Bosch, Varta y más..." />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnSaveCabeceras">Guardar</button>
+          <span id="cabecerasStatus" class="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cobertura: títulos de sección + la lista de zonas y distritos, que
+         antes estaba escrita a mano en cobertura.html sin ningún campo en
+         el panel. Las zonas son una lista abierta (agregar/quitar), no un
+         número fijo de tarjetas. -->
+    <section id="tab-cobertura" class="tab">
+      <div class="card">
+        <h3>Textos de la sección</h3>
+        <div class="form-grid">
+          <label>Título — "Cobertura confirmada"
+            <input id="covDistritosTitulo" type="text" placeholder="Cobertura confirmada" />
+          </label>
+          <label class="span-2">Bajada
+            <input id="covDistritosBajada" type="text" placeholder="¿No ves el tuyo? Llámanos igual..." />
+          </label>
+          <label>Título — "Atendemos siempre" (horarios)
+            <input id="covHorariosTitulo" type="text" placeholder="Atendemos siempre" />
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Preguntas de horarios (FAQ)</h3>
+        <p class="muted" style="margin:0 0 12px">
+          El primer bloque va abierto por defecto en la página (es el resumen
+          principal); el segundo es la pregunta desplegable.
+        </p>
+        <div class="form-grid">
+          <label>Resumen — pregunta/título
+            <input id="covHorarioResumenTitulo" type="text" placeholder="Lunes a domingo, incluidos feriados" />
+          </label>
+          <label class="span-2">Resumen — respuesta
+            <input id="covHorarioResumenTexto" type="text" placeholder="La mayoría de baterías fallan de madrugada..." />
+          </label>
+          <label>Pregunta
+            <input id="covFaqPregunta" type="text" placeholder="¿Atienden de madrugada?" />
+          </label>
+          <label class="span-2">Respuesta
+            <input id="covFaqRespuesta" type="text" placeholder="Sí. Con menos tráfico solemos llegar antes que en hora punta." />
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Zonas y distritos</h3>
+        <p class="muted" style="margin:0 0 12px">
+          Un distrito por línea dentro de cada zona. La zona llamada exactamente
+          "Callao" conserva el enlace #callao que usa el pie de página.
+        </p>
+        <div id="coberturaZonasGrid" class="grid" style="gap:12px"></div>
+        <div class="actions">
+          <button class="btn" id="btnAddZona">+ Agregar zona</button>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnSaveCobertura">Guardar</button>
+          <span id="coberturaStatus" class="status"></span>
+        </div>
+      </div>
+    </section>
+    </main>
+  </div>
+
+  <footer class="admin-footer">
+    <div class="container">
+      <p class="muted">© 2025 CambiaTuBateria. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Modal de Confirmación (reutilizable) -->
+  <div id="modalConfirm" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+      <h4 id="modalTitle">Confirmación</h4>
+      <p id="modalMsg">¿Seguro que deseas continuar?</p>
+      <div class="actions">
+        <button class="btn" id="modalCancel">Cancelar</button>
+        <button class="btn primary" id="modalOk">Sí</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edición de Producto (global, fuera de tabs) -->
+  <div id="modalProdEdit" class="modal" role="dialog" aria-modal="true" aria-labelledby="peTitle" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:800px">
+      <div class="modal-header">
+        <h4 id="peTitle">Editar producto</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="span-2">Imagen (URL pública)
+            <input id="peImg" type="text" placeholder="/ruta/publica/imagen.png" />
+          </label>
+          <div class="span-2" style="display:flex;gap:10px;align-items:center">
+            <img id="peImgPreview" alt="Vista previa" style="width:160px;height:90px;object-fit:cover;border:1px solid var(--border);border-radius:8px;display:none" />
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="peImgFile" type="file" accept="image/*" style="display:none" />
+              <button class="btn" id="peUploadBtn" type="button">Subir imagen</button>
+            </div>
+          </div>
+          <label>Nombre
+            <input id="peName" type="text" />
+          </label>
+          <label>Marca
+            <input id="peBrand" type="text" />
+          </label>
+          <label>Precio
+            <input id="pePrice" type="number" step="0.01" />
+          </label>
+          <label>CCA
+            <input id="peCca" type="number" />
+          </label>
+          <label>Capacidad (Ah)
+            <input id="peCapacity" type="number" />
+          </label>
+          <label>Tipo
+            <input id="peType" type="text" />
+          </label>
+          <label>Largo (mm)
+            <input id="peLen" type="number" />
+          </label>
+          <label>Ancho (mm)
+            <input id="peWid" type="number" />
+          </label>
+          <label>Alto (mm)
+            <input id="peHei" type="number" />
+          </label>
+          <label>Peso (kg)
+            <input id="peWeight" type="number" step="0.01" />
+          </label>
+          <label class="span-2">Polaridad
+            <input id="pePolarity" type="text" placeholder="+ - / - +" />
+          </label>
+          <label class="span-2">Descripción
+            <textarea id="peDesc"></textarea>
+          </label>
+        </div>
+        <div id="peStatus" class="status"></div>
+      </div>
+      <div class="modal-footer actions">
+        <button class="btn" id="peCancel" type="button">Cancelar</button>
+        <button class="btn primary" id="peSave" type="button">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edición de Vehículo (global) -->
+  <div id="modalVehEdit" class="modal" role="dialog" aria-modal="true" aria-labelledby="veTitle" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:720px">
+      <div class="modal-header">
+        <h4 id="veTitle">Editar vehículo</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label>Marca
+            <input id="veBrand" type="text" />
+          </label>
+          <label>Modelo
+            <input id="veModel" type="text" />
+          </label>
+          <label>Año desde
+            <input id="veYearFrom" type="number" />
+          </label>
+          <label>Año hasta
+            <input id="veYearTo" type="number" />
+          </label>
+        </div>
+        <div id="veStatus" class="status"></div>
+      </div>
+      <div class="modal-footer actions">
+        <button class="btn" id="veCancel" type="button">Cancelar</button>
+        <button class="btn primary" id="veSave" type="button">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/adminbateria/assets/js/admin.js?v=8" type="module"></script>
+  <script type="module">
+    // Editor de productos: inyectar botones "Editar" y manejar edición completa
+    const qs = (s, r=document) => r.querySelector(s);
+    const qsa = (s, r=document) => [...r.querySelectorAll(s)];
+    const API_BASE = '/adminbateria/backend/api';
+    async function jget(path){ const r = await fetch(`${API_BASE}${path}`); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }
+    async function jput(path, body){
+      const r = await fetch(`${API_BASE}${path}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      if(!r.ok){ let msg = 'HTTP '+r.status; try{ const j = await r.json(); if(j&&j.error) msg = j.error; }catch(_){ } throw new Error(msg); }
+      return r.json();
+    }
+    async function jdel(path){
+      const r = await fetch(`${API_BASE}${path}`, { method:'DELETE' });
+      if(!r.ok){ let msg='HTTP '+r.status; try{ const j=await r.json(); if(j&&j.error) msg=j.error; }catch(_){ } throw new Error(msg); }
+      return r.json();
+    }
+
+    const PRODUCT_EDIT = { id:null };
+    function showProdModal(show){ const m = qs('#modalProdEdit'); if (!m) return; m.classList.toggle('open', !!show); }
+    function extractImage(raw){
+      if (!raw) return '';
+      // Direct string fields
+      const direct = raw.image || raw.imagen || raw.imagen_url || raw.image_url || raw.img || raw.img_url || raw.imagePath;
+      if (typeof direct === 'string' && direct.trim()) return direct.trim();
+      // Common arrays possibly coming from producto_imagenes
+      const arrays = [raw.images, raw.imagenes, raw.producto_imagenes, raw.gallery, raw.photos];
+      for (const arr of arrays){
+        if (Array.isArray(arr) && arr.length){
+          // array of strings
+          if (typeof arr[0] === 'string' && arr[0].trim()) return arr[0].trim();
+          // array of objects
+          for (const it of arr){
+            if (!it) continue;
+            const u = (it.url || it.ruta || it.path || it.image_url || it.imagen_url || it.src || '').trim();
+            if (u) return u;
+          }
+        }
+      }
+      return '';
+    }
+    function normalizeProduct(x){
+      // Acepta varios formatos: {product:{...}}, {row:{...}}, o el objeto plano
+      const raw = x?.product || x?.row || x || {};
+      const pick = (...keys) => {
+        for (const k of keys){ if (raw[k] !== undefined) return raw[k]; }
+        return undefined;
+      };
+      // Imagen: intentar tanto dentro del objeto del producto como en el contenedor raíz
+      const image = extractImage(raw) || extractImage(x);
+      return {
+        id: pick('id','product_id','id_producto','producto_id') ?? null,
+        name: pick('name','nombre','titulo') || '',
+        brand: pick('brand','marca') || '',
+        price: pick('price','precio') ?? '',
+        cca: pick('cca') ?? '',
+        capacity: pick('capacity','capacidad') ?? '',
+        type: pick('type','tipo') || '',
+        len: pick('len','largo') ?? '',
+        wid: pick('wid','ancho') ?? '',
+        hei: pick('hei','alto') ?? '',
+        weight: pick('weight','peso') ?? '',
+        polarity: pick('polarity','polaridad') || '',
+        description: pick('description','descripcion') || '',
+        image
+      };
+    }
+    function fillProductEditForm(raw){
+      const p = normalizeProduct(raw);
+      PRODUCT_EDIT.id = p.id ?? PRODUCT_EDIT.id;
+      // Imagen
+      const urlInp = qs('#peImg'); const prev = qs('#peImgPreview');
+      if (urlInp) urlInp.value = p.image || '';
+      if (prev){ prev.src = p.image || ''; prev.style.display = p.image ? 'block' : 'none'; }
+      // Datos
+      qs('#peName').value = p.name || '';
+      qs('#peBrand').value = p.brand || '';
+      qs('#pePrice').value = numOrEmpty(p.price);
+      qs('#peCca').value = numOrEmpty(p.cca);
+      qs('#peCapacity').value = numOrEmpty(p.capacity);
+      qs('#peType').value = p.type || '';
+      qs('#peLen').value = numOrEmpty(p.len);
+      qs('#peWid').value = numOrEmpty(p.wid);
+      qs('#peHei').value = numOrEmpty(p.hei);
+      qs('#peWeight').value = numOrEmpty(p.weight);
+      qs('#pePolarity').value = p.polarity || '';
+      qs('#peDesc').value = p.description || '';
+    }
+    function numOrEmpty(v){ return (v===null||v===undefined||v==='') ? '' : v; }
+    function setupProdModalButtons(){
+      const cancel = qs('#peCancel'); if (cancel){ cancel.onclick = () => showProdModal(false); }
+      const save = qs('#peSave'); if (save){
+        save.onclick = async () => {
+          const st = qs('#peStatus'); if (st){ st.textContent='Guardando...'; st.className='status'; }
+          const payload = {
+            id: PRODUCT_EDIT.id,
+            image_url: (qs('#peImg').value||'').trim() || null,
+            imagen_url: (qs('#peImg').value||'').trim() || null,
+            name: qs('#peName').value.trim() || null,
+            brand: qs('#peBrand').value.trim() || null,
+            price: Number(qs('#pePrice').value) || 0,
+            cca: Number(qs('#peCca').value) || null,
+            capacity: Number(qs('#peCapacity').value) || null,
+            type: qs('#peType').value.trim() || null,
+            len: Number(qs('#peLen').value) || null,
+            wid: Number(qs('#peWid').value) || null,
+            hei: Number(qs('#peHei').value) || null,
+            weight: Number(qs('#peWeight').value) || null,
+            polarity: qs('#pePolarity').value.trim() || null,
+            description: qs('#peDesc').value.trim() || null,
+            images: (() => { const u=(qs('#peImg').value||'').trim(); return u? [u] : undefined; })()
+          };
+          try{ await jput('/productos.php', payload); if (st){ st.textContent='Guardado'; st.className='status ok'; }
+            // refrescar listados para ver la nueva imagen/datos
+            if (typeof window.loadProducts === 'function') window.loadProducts();
+            if (typeof window.loadProducts2 === 'function') window.loadProducts2();
+            // cerrar después de breve confirmación
+            setTimeout(()=> showProdModal(false), 400);
+          }catch(e){ if (st){ st.textContent='Error'; st.className='status err'; } }
+        };
+      }
+      // Subida imagen
+      const upBtn = qs('#peUploadBtn'); const fileInp = qs('#peImgFile'); const urlInp = qs('#peImg'); const prev = qs('#peImgPreview');
+      if (upBtn && fileInp){ upBtn.onclick = () => fileInp.click(); }
+      if (fileInp){
+        fileInp.onchange = async () => {
+          const f = fileInp.files[0]; if (!f) return;
+          const st = qs('#peStatus'); if (st){ st.textContent='Subiendo imagen...'; st.className='status'; }
+          const fd = new FormData(); fd.append('archivo', f); fd.append('tipo','producto');
+          try{
+            const r = await fetch(`${API_BASE}/upload.php`, { method:'POST', body: fd });
+            const j = await r.json(); if(!r.ok || !j.success) throw new Error(j.error||'Upload error');
+            if (urlInp) urlInp.value = j.ruta || '';
+            if (prev){ prev.src = j.ruta || ''; prev.style.display = j.ruta? 'block':'none'; }
+            if (st){ st.textContent='Imagen subida'; st.className='status ok'; }
+          }catch(e){ if (st){ st.textContent='Error al subir'; st.className='status err'; } }
+        };
+      }
+      // Live preview cuando cambia el texto de URL
+      if (urlInp){
+        urlInp.addEventListener('input', () => {
+          const v = (urlInp.value||'').trim();
+          if (prev){ prev.src = v; prev.style.display = v ? 'block':'none'; }
+        });
+      }
+    }
+    function activateTab(tab){
+      const links = document.querySelectorAll('a[data-tab]');
+      links.forEach(a => a.classList.toggle('active', a.dataset.tab===tab));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      const sec = qs(`#tab-${tab}`); if (sec) sec.classList.add('active');
+      const url = new URL(location.href); url.searchParams.set('p', tab); history.pushState({tab}, '', url);
+    }
+    function fillProductForm(p){
+      qs('#prodName').value = p.name || '';
+      if (qs('#prodBrand')) qs('#prodBrand').value = p.brand || '';
+      qs('#prodPrice').value = p.price ?? '';
+      qs('#prodCca').value = p.cca ?? '';
+      qs('#prodCapacity').value = p.capacity ?? '';
+      qs('#prodType').value = p.type ?? '';
+      qs('#prodLen').value = p.len ?? '';
+      qs('#prodWid').value = p.wid ?? '';
+      qs('#prodHei').value = p.hei ?? '';
+      qs('#prodWeight').value = p.weight ?? '';
+      qs('#prodPolarity').value = p.polarity ?? '';
+      qs('#prodDesc').value = p.description || '';
+    }
+    // ya no usamos el guardado en la pestaña Productos para edición desde listado
+    async function editByNameAndBrand(name, brand){
+      const n = (name||'').trim().toLowerCase();
+      const b = (brand||'').trim().toLowerCase();
+      // 1) Buscar por q=name
+      let data; let list = [];
+      try{ data = await jget('/productos.php?'+new URLSearchParams({ q: name }).toString()); list = data.products||data.items||data.rows||[]; }catch(_){ }
+      // 2) Si no hay resultados, cargar todo y filtrar
+      if (!list.length){ try{ const d2 = await jget('/productos.php'); list = d2.products||d2.items||d2.rows||[]; }catch(_){ /* ignore */ } }
+      // 3) Normalizar y buscar coincidencia exacta por nombre (+marca si viene)
+      const normList = list.map(normalizeProduct);
+      let found = normList.find(p => (p.name||'').trim().toLowerCase()===n && (!b || (p.brand||'').trim().toLowerCase()===b));
+      if (!found) found = normList[0];
+      if (!found) { alert('No se encontró el producto para editar'); return; }
+      PRODUCT_EDIT.id = found.id;
+      // 4) Intentar detalles por ID
+      let full = found;
+      if (found.id){
+        try{ const d = await jget(`/productos.php?id=${found.id}`); full = normalizeProduct(d); }catch(_){ /* ignore */ }
+      }
+      fillProductEditForm(full);
+      showProdModal(true);
+    }
+    async function buildProductsCache(){
+      if (window.__PROD_CACHE_BUILT) return;
+      try{
+        const d = await jget('/productos.php');
+        const list = (d.products||d.items||d.rows||[]).map(normalizeProduct);
+        window.__PROD_CACHE = new Map();
+        list.forEach(p => {
+          const key = `${(p.name||'').trim().toLowerCase()}|${(p.brand||'').trim().toLowerCase()}`;
+          window.__PROD_CACHE.set(key, p);
+        });
+        window.__PROD_CACHE_BUILT = true;
+      }catch(_){ /* ignore */ }
+    }
+    function findCachedProduct(name, brand){
+      const key = `${(name||'').trim().toLowerCase()}|${(brand||'').trim().toLowerCase()}`;
+      return window.__PROD_CACHE?.get(key);
+    }
+    async function fetchAndCacheImage(name, brand){
+      try{
+        // Buscar por nombre para obtener ID
+        const params = new URLSearchParams(); if (name) params.set('q', name); if (brand) params.set('brand', brand);
+        const data = await jget('/productos.php?'+params.toString());
+        const rawList = (data.products||data.items||data.rows||[]);
+        const list = rawList.map(normalizeProduct);
+        const n = (name||'').trim().toLowerCase();
+        const b = (brand||'').trim().toLowerCase();
+        const found = list.find(p => (p.name||'').trim().toLowerCase()===n && (!b || (p.brand||'').trim().toLowerCase()===b)) || list[0];
+        if (!found) return '';
+        if (found.image) return found.image;
+        if (found.id){
+          const d = await jget(`/productos.php?id=${found.id}`);
+          const full = normalizeProduct(d);
+          const key = `${n}|${b}`; if (!window.__PROD_CACHE) window.__PROD_CACHE = new Map();
+          window.__PROD_CACHE.set(key, full);
+          return full.image || '';
+        }
+        return '';
+      }catch(_){ return ''; }
+    }
+    function ensureThumb(container, name, brand){
+      if (!container) return;
+      if (container.querySelector('.chip-thumb')) return;
+      const p = findCachedProduct(name, brand);
+      let url = p?.image || '';
+      const img = document.createElement('img');
+      img.className = 'chip-thumb'; img.alt = name||'';
+      img.style.display = 'none';
+      img.addEventListener('error', () => { img.style.display='none'; });
+      container.insertBefore(img, container.firstChild);
+      const apply = (u) => {
+        if (u){ img.src = u; img.style.display='block'; }
+        else {
+          // Placeholder si no hay imagen
+          img.remove();
+          const ph = document.createElement('div');
+          ph.className = 'chip-thumb';
+          ph.style.display = 'block';
+          ph.style.background = '#f1f5f9';
+          ph.style.border = '1px solid var(--border)';
+          ph.style.borderRadius = '8px';
+          ph.style.height = '140px';
+          ph.style.backgroundImage = 'linear-gradient(135deg, rgba(148,163,184,.25) 25%, transparent 25%), linear-gradient(225deg, rgba(148,163,184,.25) 25%, transparent 25%), linear-gradient(45deg, rgba(148,163,184,.25) 25%, transparent 25%), linear-gradient(315deg, rgba(148,163,184,.25) 25%, #f1f5f9 25%)';
+          ph.style.backgroundPosition = '10px 0, 10px 0, 0 0, 0 0';
+          ph.style.backgroundSize = '10px 10px';
+          container.insertBefore(ph, container.firstChild);
+        }
+      };
+      if (url){ apply(url); }
+      // Si no hay url, buscarla asincrónicamente y actualizar
+      if (!url){ fetchAndCacheImage(name, brand).then(apply); }
+    }
+    async function injectEditButtons(){
+      await buildProductsCache();
+      // Global listado (#productsGrid): cada .card contiene varias filas .row
+      qsa('#productsGrid .card').forEach(section => {
+        // Título de marca
+        const brandTitle = section.querySelector('h4');
+        const brand = brandTitle ? brandTitle.textContent.trim() : '';
+        qsa(':scope > .row', section).forEach(row => {
+          const strong = row.querySelector('strong'); const name = strong ? strong.textContent.trim() : '';
+          if (!row.querySelector('[data-action="edit"]')){
+            const edit = document.createElement('button'); edit.className='btn sm'; edit.textContent='Editar'; edit.dataset.action='edit';
+            edit.addEventListener('click', (e) => { e.stopPropagation(); editByNameAndBrand(name, brand); });
+            row.appendChild(edit);
+          }
+          // thumb
+          ensureThumb(row, name, brand);
+        });
+      });
+      // In-tab listado (#productsGrid2): chips .product-chip
+      qsa('#productsGrid2 .card').forEach(section => {
+        const brandTitle = section.querySelector('h4');
+        const brand = brandTitle ? brandTitle.textContent.trim() : '';
+        qsa('.product-chip', section).forEach(chip => {
+          const strong = chip.querySelector('.chip-info strong'); const name = strong ? strong.textContent.trim() : '';
+          if (!chip.querySelector('[data-action="edit"]')){
+            const edit = document.createElement('button'); edit.className='btn sm'; edit.textContent='Editar'; edit.dataset.action='edit';
+            edit.addEventListener('click', (e) => { e.stopPropagation(); editByNameAndBrand(name, brand); });
+            chip.appendChild(edit);
+          }
+          // thumb
+          ensureThumb(chip, name, brand);
+        });
+      });
+    }
+    function observeList(containerSel){
+      const node = qs(containerSel); if (!node) return;
+      const obs = new MutationObserver(() => injectEditButtons());
+      obs.observe(node, { childList:true, subtree:true });
+    }
+    // ---- Vehículos asociados: Editar / Eliminar ----
+    const VEH_EDIT = { id:null };
+    function showVehModal(show){ const m=qs('#modalVehEdit'); if(!m) return; m.classList.toggle('open', !!show); }
+    function fillVehForm(v){
+      VEH_EDIT.id = v.id;
+      qs('#veBrand').value = v.brand||'';
+      qs('#veModel').value = v.model||'';
+      qs('#veYearFrom').value = v.yearFrom ?? '';
+      qs('#veYearTo').value = v.yearTo ?? '';
+    }
+    function parseVehCard(card){
+      const title = card.querySelector('strong')?.textContent || '';
+      const muted = card.querySelector('.muted')?.textContent || '';
+      const [brand, ...rest] = title.split(' ');
+      const model = rest.join(' ').trim();
+      let yf=null, yt=null; const m = muted.match(/(\d{4})(?:\s*-\s*(\d{4}))?/);
+      if (m){ yf = parseInt(m[1],10); yt = m[2]? parseInt(m[2],10): null; }
+      // El ID no está en el DOM, así que consultamos por marca+modelo+año para obtenerlo
+      return { brand: brand.trim(), model, yearFrom: yf, yearTo: yt };
+    }
+    async function findVehId(v){
+      const q = new URLSearchParams(); if (v.brand) q.set('brand', v.brand); if (v.model) q.set('model', v.model); if (v.yearFrom) q.set('year', v.yearFrom);
+      const d = await jget('/vehiculos_asociados.php?'+q.toString());
+      const items = d.items||[];
+      const hit = items.find(it => it.brand===v.brand && it.model===v.model && (v.yearFrom? it.yearFrom===v.yearFrom : true));
+      return hit?.id || null;
+    }
+    function injectVehButtons(){
+      const grid = qs('#assocGrid'); if (!grid) return;
+      grid.querySelectorAll('.card').forEach(async card => {
+        if (card.dataset.vehinjected === '1') return;
+        card.dataset.vehinjected = '1';
+        const actions = card.querySelector('.actions') || card; // fallback
+        const meta = parseVehCard(card);
+        const edit = document.createElement('button'); edit.className='btn sm'; edit.textContent='Editar'; edit.dataset.vehaction='edit';
+        const del = document.createElement('button'); del.className='btn sm danger'; del.textContent='Eliminar'; del.dataset.vehaction='delete';
+        // resolver id
+        let vid = await findVehId(meta); if (!vid) return; // si no se pudo encontrar, no inyectar
+        edit.onclick = async () => { fillVehForm({ id:vid, ...meta }); showVehModal(true); };
+        del.onclick = async () => {
+          if (!window.confirm('¿Eliminar este vehículo del catálogo?')) return;
+          try{ await jdel(`/vehiculos_asociados.php?id=${vid}`); if (typeof loadAssociations==='function') loadAssociations(); }
+          catch(e){ alert('No se pudo eliminar: '+(e?.message||'')); }
+        };
+        actions.appendChild(edit); actions.appendChild(del);
+      });
+    }
+    function setupVehModal(){
+      const cancel=qs('#veCancel'); if (cancel) cancel.onclick = () => showVehModal(false);
+      const save=qs('#veSave'); if (save){
+        save.onclick = async () => {
+          const st = qs('#veStatus'); if (st){ st.textContent='Guardando...'; st.className='status'; }
+          const body = {
+            vehiculo_id: VEH_EDIT.id,
+            brand: qs('#veBrand').value.trim() || null,
+            model: qs('#veModel').value.trim() || null,
+            yearFrom: qs('#veYearFrom').value ? Number(qs('#veYearFrom').value) : null,
+            yearTo: qs('#veYearTo').value ? Number(qs('#veYearTo').value) : null
+          };
+          try{ await jput('/vehiculos_asociados.php', body); if (st){ st.textContent='Guardado'; st.className='status ok'; }
+            if (typeof loadAssociations==='function') loadAssociations(); setTimeout(()=> showVehModal(false), 300);
+          }catch(e){ if (st){ st.textContent='Error'; st.className='status err'; } }
+        };
+      }
+    }
+    // Inicializar cuando el DOM ya tiene admin.js cargado
+    window.addEventListener('load', () => {
+      injectEditButtons();
+      observeList('#productsGrid');
+      observeList('#productsGrid2');
+      setupProdModalButtons();
+      // vehiculos asociados
+      injectVehButtons();
+      const assocObs = new MutationObserver(() => injectVehButtons());
+      const assocGrid = qs('#assocGrid'); if (assocGrid){ assocObs.observe(assocGrid, { childList:true, subtree:true }); }
+      setupVehModal();
+      // Sync vista previa del logo al cargar y en cambios del input
+      const prev = qs('#siteLogoPreview');
+      const inp = qs('#siteLogoFile');
+      const syncLogoPreview = () => { if (prev && inp){ const v = (inp.value||'').trim(); if (v) prev.src = v; } };
+      if (inp){ inp.addEventListener('input', syncLogoPreview); }
+      // Si por alguna razón loadSite no lo cargó, intenta sincronizar ahora
+      syncLogoPreview();
+    });
+  </script>
+</body>
+</html>

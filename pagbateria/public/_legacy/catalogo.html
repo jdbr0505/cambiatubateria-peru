@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CambiaTuBateria - Catálogo</title>
+  <meta name="description" content="Catálogo completo de baterías premium. Filtros por marca y vehículo." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+<body data-view="catalog">
+  <header class="site-header">
+    <div class="container header-grid">
+      <button class="mobile-menu-button" id="mobileMenuToggle" aria-label="Abrir menú" aria-controls="mobileMenu" aria-expanded="false">☰</button>
+      <nav class="nav-left"></nav>
+      <div class="brand center">
+        <img class="brand-logo brand-mini" src="./assets/img/logos/logo_autotraders.png" alt="CambiaTuBateria" />
+        <span class="brand-title">CambiaTuBateria</span>
+      </div>
+      <nav class="nav-right">
+        <a class="cart-btn" href="#carrito" aria-label="Carrito">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-badge">0</span>
+        </a>
+      </nav>
+    </div>
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true"></div>
+  </header>
+
+  <main>
+    <section id="catalogo" class="catalog" style="padding-top:1.2rem">
+      <div class="container">
+        <h2 class="section-title">Catálogo de Baterías</h2>
+        <div class="catalog-filters">
+          <div class="filter-card">
+            <div class="filter-title"><span class="icon red" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 13.5l-6.5 6.5a2 2 0 01-2.83 0L3 12.33V4h8.33L20 10.17a2 2 0 010 2.83z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="7.5" cy="7.5" r="1.2" fill="currentColor"/>
+              </svg>
+            </span> Filtrar por Marca</div>
+            <div class="filter-body">
+              <select id="brandFilter"></select>
+            </div>
+          </div>
+          <div class="filter-card">
+            <div class="filter-title"><span class="icon blue" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M11 7v8M7 11h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span> Buscar por Vehículo</div>
+            <div class="filter-body vehicle-row">
+              <select id="vehicleMake"></select>
+              <select id="vehicleModel"></select>
+              <select id="vehicleYear"></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="catalog-actions">
+          <button id="btnSearch" class="btn btn-danger">Buscar Baterías</button>
+          <button id="btnClear" class="btn btn-outline">Limpiar Filtros</button>
+          <div class="result-count" id="resultCount"></div>
+        </div>
+
+        <div class="products-slider">
+          <button class="products-arrow left" id="productsPrev" aria-label="Anterior">&#10094;</button>
+          <div class="products-viewport">
+            <div id="productsGrid" class="product-track"></div>
+          </div>
+          <button class="products-arrow right" id="productsNext" aria-label="Siguiente">&#10095;</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 CambiaTuBateria. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Cart Drawer (reutilizado) -->
+  <aside id="cartDrawer" class="cart-drawer" aria-hidden="true" aria-labelledby="cartTitle">
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-panel">
+      <div class="cart-header">
+        <h3 id="cartTitle">Tu Carrito</h3>
+        <button id="cartClose" class="cart-close" aria-label="Cerrar">×</button>
+      </div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-footer">
+        <div class="cart-total-row">
+          <span>Total</span>
+          <strong id="cartTotal">$0</strong>
+        </div>
+        <a id="cartCheckout" class="btn btn-primary" href="#">Finalizar compra</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Product Detail Modal -->
+  <div id="productModal" class="modal" aria-hidden="true" role="dialog" aria-modal="false">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-dialog" role="document" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" aria-label="Cerrar">×</button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalTitle"></h3>
+        </div>
+        <div class="modal-body">
+          <div class="modal-col image">
+            <img id="modalBrandLogo" alt="Marca" />
+          </div>
+          <div class="modal-col main">
+            <p id="modalDescription" class="muted"></p>
+            <div class="modal-price" id="modalPrice"></div>
+            <div class="modal-options">
+              <div class="option-group">
+                <label><input type="radio" name="coreOption" value="return" checked /> Dejar batería</label>
+                <label><input type="radio" name="coreOption" value="no_return" /> No dejar batería</label>
+              </div>
+              <div class="qty-group">
+                <span>Cantidad:</span>
+                <button type="button" class="qty-btn" id="qtyMinus">−</button>
+                <input id="qtyInput" type="number" min="1" value="1" />
+                <button type="button" class="qty-btn" id="qtyPlus">+</button>
+              </div>
+              <button class="btn btn-danger wide" id="btnAddToCart">Agregar al Carrito</button>
+            </div>
+          </div>
+          <div class="modal-col specs">
+            <dl class="spec-list">
+              <div><dt>Tipo:</dt><dd id="specType">—</dd></div>
+              <div><dt>Amperios (Ah):</dt><dd id="specAmps">—</dd></div>
+              <div><dt>CCA (-18°C):</dt><dd id="specCca">—</dd></div>
+              <div><dt>Largo:</dt><dd id="specLength">—</dd></div>
+              <div><dt>Ancho:</dt><dd id="specWidth">—</dd></div>
+              <div><dt>Alto:</dt><dd id="specHeight">—</dd></div>
+              <div><dt>Peso (kg):</dt><dd id="specWeight">—</dd></div>
+              <div><dt>Polaridad:</dt><dd id="specPolarity">—</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./assets/js/app.js" type="module"></script>
+</body>
+</html>

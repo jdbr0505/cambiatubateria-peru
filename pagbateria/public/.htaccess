@@ -1,0 +1,8 @@
+# Carpetas internas que no deben servirse por HTTP:
+#   _partials/ son fragmentos de nav y pie que solo usa el generador.
+#   _legacy/   es el sitio viejo archivado por si el negocio quiere volver.
+# Servirlos duplicaría contenido (malo para SEO) y expondría el diseño anterior.
+RedirectMatch 404 ^/pagbateria/public/(_partials|_legacy)(/|$)
+
+# Fallback por si la ruta pública no lleva el prefijo pagbateria/public.
+RedirectMatch 404 ^/(_partials|_legacy)(/|$)

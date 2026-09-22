@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# El panel administrativo, el sitio anterior al rediseño (index.php) y las
+# carpetas internas no deben rastrearse ni aparecer en el buscador.
+Disallow: /adminbateria/
+Disallow: /index.php
+Disallow: /_legacy/
+Disallow: /pagbateria/backend/
+
+Sitemap: https://cambiatubateriaperu.com/sitemap.xml

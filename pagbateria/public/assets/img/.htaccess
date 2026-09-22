@@ -1,0 +1,23 @@
+# Defensa en profundidad para la carpeta de subidas.
+#
+# La validación de upload.php ya rechaza cualquier cosa que no sea una imagen
+# real. Esto es la segunda barrera: si algún ejecutable llegara a colarse por
+# una vía no prevista, el servidor lo entrega como texto en vez de correrlo.
+
+php_flag engine off
+
+<FilesMatch "\.(php|php[0-9]|phtml|phar|cgi|pl|py|sh|htaccess)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Nada en esta carpeta debe interpretarse como script, pase lo que pase.
+<IfModule mod_mime.c>
+  RemoveHandler .php .phtml .phar .cgi .pl .py
+  RemoveType .php .phtml .phar
+</IfModule>

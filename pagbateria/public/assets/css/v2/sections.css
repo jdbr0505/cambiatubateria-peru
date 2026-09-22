@@ -1,0 +1,593 @@
+/* ============================================================================
+ * SECCIONES — bloques de contenido de la landing y páginas internas.
+ * Requiere tokens.css cargado antes.
+ * ========================================================================= */
+
+/* --- Franja de marcas -------------------------------------------------------
+ * Prueba social antes de pedir nada. El usuario reconoce las marcas y baja la
+ * guardia sobre si el negocio es serio.
+ * ------------------------------------------------------------------------- */
+
+/* --- Tira de marcas FIJA -----------------------------------------------------
+ * Estática, sin animación ni JS: las 8 marcas están escritas en el HTML. El
+ * carrusel anterior se llenaba pidiendo brands.php en cada visita, y cuando la
+ * BD tardaba o el Service Worker servía un JS viejo salía vacío en el
+ * escritorio (en el celular, con caché nueva, sí cargaba). Una fila fija no
+ * puede fallar: no depende de red ni de tiempo.
+ *
+ * Los logos reales vienen sobre fondo blanco (varios son .jpg, con el blanco
+ * horneado en el pixel), así que cada uno va en su propia placa clara: se lee
+ * como decisión de diseño y no como un recorte suelto sobre el hero oscuro.
+ * ------------------------------------------------------------------------- */
+.logos-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.logos-strip__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Móvil: placas de 64px, dos por fila. Las de 88px/9.5rem se veían enormes
+     en 375px y dominaban el remate del hero. Suben en tablet+. */
+  height: 64px;
+  min-width: 6.75rem;
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.25) inset;
+}
+
+.logos-strip__item img {
+  max-height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .logos-strip__item { height: 88px; min-width: 9.5rem; padding-inline: var(--space-5); }
+  .logos-strip__item img { max-height: 60px; }
+}
+
+/* --- Los tres pasos ----------------------------------------------------------
+ * Antes eran tres tarjetas con un párrafo cada una. Quien llega varado no lee
+ * párrafos: ahora es un recorrido — número, ícono y una sola línea por paso —
+ * con una guía que los une en escritorio para que se lea como un proceso y no
+ * como tres bloques sueltos.
+ * ------------------------------------------------------------------------- */
+.pasos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-12);
+}
+
+.paso {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+}
+
+.paso__num {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: var(--radius-full);
+  background: var(--energy-400);
+  /* Texto blanco, no oscuro: el rojo sólido no tiene luminosidad para
+     texto oscuro legible encima (ver la nota de la escala en tokens.css). */
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  /* Por encima de la guía que cruza por detrás. */
+  position: relative;
+  z-index: 1;
+}
+
+.paso__icono { color: var(--brand-600); }
+.paso__icono svg { width: 3.5rem; height: 3.5rem; }
+
+.paso__titulo {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--brand-900);
+}
+
+.paso__texto {
+  margin: 0;
+  color: var(--ink-600);
+  font-size: var(--text-lg);
+  max-width: 26ch;
+}
+
+@media (min-width: 768px) {
+  .pasos { grid-template-columns: repeat(3, 1fr); gap: var(--space-8); }
+
+  /* Guía entre pasos: nace en el centro del número y llega al siguiente. */
+  .paso:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 2.25rem;
+    left: calc(50% + 3rem);
+    width: calc(100% - 6rem);
+    height: 2px;
+    background: var(--line-strong);
+  }
+}
+
+/* --- Franja de marca (separador) --------------------------------------------
+ * Banda oscura entre dos secciones claras ("3 pasos" y "Catálogo") que antes
+ * se empalmaban dejando un hueco blanco muerto. Reusa el lenguaje del hero:
+ * fondo grafito y la misma cuchilla roja diagonal en el borde derecho, para
+ * que el motivo de marca reaparezca a media página sin sentirse pegado.
+ * ------------------------------------------------------------------------- */
+.franja-marca {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--brand-950);
+  color: var(--paper);
+  padding-block: var(--space-12);
+}
+
+@media (min-width: 768px) {
+  .franja-marca { padding-block: var(--space-16); }
+}
+
+/* Cuchilla roja: mismas tres capas que .hero__accent (hoja + línea oscura de
+   separación + filo blanco), a escuadra con la caja de arriba abajo. */
+.franja-marca__accent {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  clip-path: polygon(94% 0, 100% 0, 100% 100%, 82% 100%);
+  background: linear-gradient(165deg, var(--energy-300) 0%, var(--energy-400) 45%, var(--energy-600) 100%);
+}
+
+.franja-marca__accent::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(91.5% 0, 94% 0, 82% 100%, 79.5% 100%);
+  background: var(--brand-950);
+}
+
+.franja-marca__accent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(98.7% 0, 100% 0, 100% 100%, 96.7% 100%);
+  background: rgb(255 255 255 / 0.35);
+}
+
+.franja-marca__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 46rem;
+}
+
+.franja-marca__eyebrow { color: var(--energy-300); }
+
+.franja-marca__titulo {
+  margin: var(--space-3) 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-snug);
+  text-wrap: balance;
+}
+
+/* --- Franja del buscador con foto de fondo -----------------------------------
+ * Antes era una tarjeta blanca sobre fondo blanco: la página se sentía plana
+ * apenas se bajaba del header. Reusa la foto del hero (mismo técnico, mismo
+ * tema "instalación") a sangre detrás, con velo oscuro — igual patrón que
+ * .hero__scrim — para que la tarjeta del buscador flote encima y se lea con
+ * la misma sombra que ya tenía, sin necesitar una foto nueva.
+ * ------------------------------------------------------------------------- */
+.catalogo-finder {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* Antes var(--space-16)/var(--space-12): medido para la tarjeta vertical
+     de 3 campos apilados. Con el buscador horizontal (una sola fila, mucho
+     menos alto) esa foto quedaba con demasiado aire arriba y abajo — se
+     veía desproporcionada frente a una tarjeta tan compacta. */
+  padding-block: var(--space-10) var(--space-8);
+}
+
+.catalogo-finder__media { position: absolute; inset: 0; z-index: -1; }
+
+.catalogo-finder__bg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 65% 25%;
+}
+
+.catalogo-finder__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(15 15 16 / 0.72), rgb(15 15 16 / 0.55));
+}
+
+/* --- Buscador de compatibilidad ---------------------------------------------
+ * Es el atajo de conversión para quien no está varado sino comparando precio.
+ * ------------------------------------------------------------------------- */
+
+/* Buscador Marca → Modelo → Año. Apilado en móvil (un campo por fila, más
+   fácil de tocar); horizontal desde tablet — pedido explícito del jefe, "en
+   formato horizontal... pero de una mejor manera y mejor estructurada" que
+   la referencia de la competencia. Mejor estructurada, concretamente:
+   - Cada campo conserva su etiqueta visible arriba (la referencia solo usa
+     texto de placeholder, que desaparece en cuanto el usuario elige algo).
+   - El botón se integra en la misma fila en vez de quedar descolgado a un
+     lado con otro tono de alto.
+   - align-items:end alinea los selects y el botón por su base, no por su
+     tope: con etiquetas de alto distinto arriba, alinear por el tope dejaba
+     los controles a alturas distintas. */
+.finder {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: end;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+@media (min-width: 768px) {
+  .finder {
+    /* 3 campos a partes iguales + el botón a su ancho de contenido, en una
+       sola fila. */
+    grid-template-columns: repeat(3, 1fr) auto;
+  }
+  .finder .btn { white-space: nowrap; }
+}
+
+/* En el catálogo el buscador convive con el campo de texto de la barra
+   (el protagonista ahí) — se acota para no competir por atención ni
+   desbordar en pantallas muy anchas. Sin margin-bottom propio: duplicaba
+   el padding-block final de .catalogo-finder y dejaba la foto con
+   demasiado aire muerto antes de cortar a la sección blanca de abajo. */
+.finder--catalogo {
+  max-width: 56rem;
+  margin-inline: auto;
+}
+
+/* En la landing SÍ es protagonista de su sección — usa el ancho completo
+   del contenedor, sin acotar. Fondo del mismo tono oscuro que el navbar
+   (pedido del jefe, "como en El Mundo de las Baterías") — SOLO acá, el de
+   Catálogo se queda blanco como estaba (ya flota sobre una foto propia). */
+.finder--landing {
+  margin-bottom: var(--space-10);
+  background: rgb(6 13 24);
+  border-color: rgb(255 255 255 / 0.1);
+}
+
+.finder--landing .field__label { color: var(--brand-200); }
+
+.finder__note {
+  font-size: var(--text-sm);
+  color: var(--ink-500);
+  text-align: center;
+}
+
+/* Los select nativos traen la flecha del sistema; se reemplaza para que no
+   desentone con el resto de campos. */
+select.field__input {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-500) 50%),
+                    linear-gradient(135deg, var(--ink-500) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 55%, calc(100% - 15px) 55%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: var(--space-10);
+}
+
+select.field__input:disabled { background-color: var(--paper-3); color: var(--ink-400); }
+
+/* --- Distritos ---------------------------------------------------------------
+ * Lista escaneable, no párrafo: el usuario busca SU distrito, no lee la lista.
+ * ------------------------------------------------------------------------- */
+
+.districts {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
+  gap: var(--space-2);
+}
+
+.districts li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.districts li::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--success-600);
+  flex-shrink: 0;
+}
+
+/* Agrupa los distritos por zona: antes eran 20 en una sola rejilla plana, sin
+   ningún punto de referencia para ubicar el propio distrito. */
+.districts-zonas {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.districts-zona__titulo {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--ink-600);
+}
+
+/* --- Sección de distritos con foto de fondo ----------------------------------
+ * Antes una foto chica enmarcada + tarjetas blancas sobre sección blanca: todo
+ * el bloque se sentía plano. Misma foto a sangre detrás, velo oscuro para
+ * legibilidad (igual patrón que .hero__scrim / .catalogo-finder__scrim) — las
+ * tarjetas de distrito (ya blancas) flotan encima con contraste real.
+ * ------------------------------------------------------------------------- */
+.cobertura-distritos {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.cobertura-distritos__media { position: absolute; inset: 0; z-index: -1; }
+
+.cobertura-distritos__bg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.cobertura-distritos__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(15 15 16 / 0.8) 0%, rgb(15 15 16 / 0.68) 55%, rgb(15 15 16 / 0.78) 100%);
+}
+
+/* El texto que vive directo sobre la foto (no las tarjetas, que ya son
+   blancas y opacas) necesita el mismo volteo claro que .section--dark. */
+.cobertura-distritos .eyebrow { color: var(--energy-400); }
+.cobertura-distritos .section-head__title { color: var(--paper); }
+.cobertura-distritos .section-head__lead { color: var(--brand-200); }
+.cobertura-distritos .districts-zona__titulo { color: var(--paper); }
+
+/* --- Preguntas frecuentes ---------------------------------------------------
+ * <details> nativo: cero JavaScript, accesible por teclado de fábrica, y el
+ * contenido queda en el HTML para que Google lo indexe.
+ * ------------------------------------------------------------------------- */
+
+.faq { display: grid; gap: var(--space-2); }
+
+.faq__item {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.faq__item[open] { border-color: var(--line-strong); box-shadow: var(--shadow-sm); }
+
+.faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: var(--touch-min);
+  padding: var(--space-4) var(--space-5);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq__question::-webkit-details-marker { display: none; }
+
+.faq__question::after {
+  content: "+";
+  font-size: var(--text-xl);
+  font-weight: 400;
+  color: var(--ink-400);
+  flex-shrink: 0;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+/* Un solo glifo que rota 45°, no dos contenidos que se canjean: "+" girado
+   45° se lee como "x" (cerrar), que comunica lo mismo que el "−" sin
+   necesitar un content nuevo que no puede animarse. */
+.faq__item[open] .faq__question::after {
+  transform: rotate(45deg);
+}
+
+.faq__answer {
+  padding: 0 var(--space-5) var(--space-5);
+  color: var(--ink-600);
+  max-width: 62ch;
+}
+
+/* --- CTA final ---------------------------------------------------------------- */
+
+/* Antes era solo un border-top de 1px sobre el mismo fondo claro del
+   catálogo: apenas se notaba y el bloque se leía como un vacío estático.
+   El degradado suma profundidad sin pintar todo el bloque de un color, y el
+   glifo (ver .cta-final__deco) rellena ese espacio con una forma que
+   además anticipa de qué trata la sección. */
+.cta-final {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* rgba manual, no var(--whatsapp): CSS no tiene forma corta de bajarle la
+     opacidad a una custom property de color sin relative color syntax
+     (soporte aún desigual). Son los mismos 37/211/102 de --whatsapp. */
+  background: radial-gradient(ellipse 70% 55% at 82% 8%, rgba(37, 211, 102, 0.09), transparent 62%), var(--paper-2);
+}
+
+.cta-final__deco {
+  position: absolute;
+  top: -3.5rem;
+  right: -3.5rem;
+  width: 18rem;
+  height: 18rem;
+  color: var(--whatsapp);
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (min-width: 768px) {
+  .cta-final__deco { width: 24rem; height: 24rem; top: -5rem; right: -4rem; }
+}
+
+.cta-final .container { position: relative; z-index: 1; }
+
+/* --- Catálogo ---------------------------------------------------------------
+ * Las tarjetas de producto se estiran a la misma altura por la rejilla; el
+ * precio y el botón se anclan abajo para que la fila quede alineada aunque
+ * los nombres tengan largos distintos.
+ * ------------------------------------------------------------------------- */
+
+.producto { align-items: flex-start; }
+
+/* Sangra hasta el borde de la tarjeta (márgenes negativos que cancelan el
+   padding de .card) en vez de quedar con un marco alrededor — así se lee
+   como foto de producto, no como una miniatura flotando dentro de la tarjeta.
+   Solo las esquinas superiores heredan el radio de la tarjeta; las inferiores
+   quedan rectas porque ahí sigue el contenido con padding normal.
+   El recorte (aspect-ratio + overflow) vive en el wrapper, no en el <img>:
+   muchas fotos de fábrica traen la batería centrada con un margen claro
+   alrededor dentro del propio archivo — con object-fit:cover a secas ese
+   margen se ve como un hueco gris (el fondo de placeholder asomando). Un
+   zoom leve en el <img> (scale) recorta ese margen contra el borde del
+   wrapper en vez de mostrarlo. */
+.producto__foto-wrap {
+  width: calc(100% + var(--space-6) * 2);
+  margin: calc(var(--space-6) * -1) calc(var(--space-6) * -1) 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--paper-3);
+}
+
+.producto__foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.12);
+}
+
+.producto__specs {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-600);
+}
+
+.producto__specs li {
+  padding: var(--space-1) var(--space-2);
+  background: var(--paper-3);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.producto__precio {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  letter-spacing: var(--tracking-tight);
+  color: var(--brand-900);
+  /* Empuja precio y botón al fondo: alinea las filas de la rejilla. */
+  margin-top: auto;
+}
+
+.producto__descuento {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--success-600);
+}
+
+.producto .btn { width: 100%; margin-top: var(--space-2); }
+
+/* --- Filtros de marca (chips) ------------------------------------------------ */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+}
+
+.chip {
+  min-height: var(--touch-min);
+  padding-inline: var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-full);
+  background: var(--paper);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+
+.chip:hover { border-color: var(--brand-600); }
+
+.chip--activa {
+  background: var(--brand-800);
+  border-color: var(--brand-800);
+  color: var(--paper);
+}
+
+/* --- Estado vacío ------------------------------------------------------------
+ * Filtrar y no encontrar nada es un resultado válido, no un error. El estado
+ * vacío ofrece la salida (llamar) en vez de dejar al usuario en un callejón.
+ * ------------------------------------------------------------------------- */
+
+.estado-vacio {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+  background: var(--paper-2);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+}
+
+.estado-vacio__titulo { font-size: var(--text-lg); font-weight: 700; }
+.estado-vacio__texto { color: var(--ink-600); font-size: var(--text-sm); max-width: 38ch; }

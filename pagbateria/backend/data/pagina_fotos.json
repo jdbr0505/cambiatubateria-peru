@@ -1,0 +1,26 @@
+{
+  "hero": {
+    "path": "/pagbateria/public/assets/img/optimizadas/hero-instalacion.jpg",
+    "alt": "Técnico de CambiaTuBatería instalando una batería en el auto del cliente"
+  },
+  "catalogo": {
+    "path": "/pagbateria/public/assets/img/optimizadas/hero-instalacion.jpg",
+    "alt": "Técnico instalando una batería de auto a domicilio"
+  },
+  "servicios": {
+    "path": "/pagbateria/public/assets/img/optimizadas/servicios-instalacion.jpg",
+    "alt": "Persona conectando cables de paso a la batería de un auto estacionado en la calle"
+  },
+  "cobertura": {
+    "path": "/pagbateria/public/assets/img/optimizadas/cobertura-lima.jpg",
+    "alt": "Técnico revisando el motor de un auto en un taller"
+  },
+  "nosotros": {
+    "path": "/pagbateria/public/assets/img/optimizadas/nosotros-equipo.jpg",
+    "alt": "Tres técnicos con herramientas de pie frente a una camioneta de servicio"
+  },
+  "contacto": {
+    "path": "/pagbateria/public/assets/img/optimizadas/nosotros-equipo.jpg",
+    "alt": "Tres técnicos con herramientas de pie frente a una camioneta de servicio"
+  }
+}

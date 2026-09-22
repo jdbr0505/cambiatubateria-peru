@@ -1,0 +1,37 @@
+# /.gitignore
+.env
+*.log
+# PHP escribe el log de errores en un archivo llamado literal "error_log"
+# (sin extensión) cuando no hay error_log=ruta.log en el ini — *.log NO lo
+# atrapa. Uno llegó a versionarse (adminbateria/error_log) con la ruta
+# absoluta del servidor (/home/<usuario_cpanel>/public_html/...) expuesta en
+# los stack traces: es reconocimiento gratis para quien lo encuentre.
+error_log
+node_modules/
+dist/
+test-results/
+playwright-report/
+
+# Respaldos bajados del servidor y paquetes de despliegue. El respaldo de
+# adminbateria/ contiene el código anterior a Fase 0, con las credenciales de
+# MySQL escritas dentro: si entra al historial, vuelve a filtrarse lo que ya
+# costó una rotación de contraseña. El repositorio no necesita ningún .zip.
+*.zip
+
+# Grafo de conocimiento generado por /graphify — se reconstruye localmente,
+# no aporta nada versionado (incluye un HTML de +1MB con vis-network embebido).
+graphify-out/
+
+# Espacio de trabajo temporal de subagent-driven-development y revisiones
+# puntuales (diffs, listas de archivos) — scratch local, no versionable.
+.superpowers/
+
+# Supresiones de falsos positivos del hook de diseño de una herramienta de
+# desarrollo — estado local de esa herramienta, no del sitio.
+.impeccable/
+.claude/
+
+# Contadores del rate-limit de contact.php y auxilio.php. Los escribe el propio
+# PHP en tiempo de ejecución, uno por IP: versionarlos subiría al repositorio
+# huellas de IP de visitantes reales y además causaría conflictos constantes.
+pagbateria/backend/data/rate_*.json

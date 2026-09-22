@@ -1,0 +1,20 @@
+# Enable URL rewriting for clean URLs
+Options -MultiViews
+RewriteEngine On
+RewriteBase /adminbateria/
+
+# If the request is for an existing file or directory, serve it directly
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Redirect requests that explicitly include .html to clean URL (e.g., /login.html -> /login)
+RewriteCond %{THE_REQUEST} \s/([A-Za-z0-9_-]+)\.html[\s?] [NC]
+RewriteRule ^ %1 [R=301,L]
+
+# Map "/something" to "/something.html" (only if the .html exists)
+RewriteCond %{DOCUMENT_ROOT}/adminbateria/$1.html -f
+RewriteRule ^([A-Za-z0-9_-]+)/?$ $1.html [L]
+
+# Fallback: allow index.html by default (handled by Apache DirectoryIndex)
+DirectoryIndex index.html

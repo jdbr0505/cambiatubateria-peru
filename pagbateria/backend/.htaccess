@@ -1,0 +1,8 @@
+<IfModule mod_php7.c>
+  php_flag display_errors Off
+</IfModule>
+
+FileETag None
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type, X-Admin-Token"

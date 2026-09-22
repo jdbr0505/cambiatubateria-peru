@@ -1,0 +1,200 @@
+/* ============================================================================
+ * TOKENS DE DISEÑO — CambiaTuBatería Perú
+ *
+ * Única fuente de color, tipografía y espaciado. Ningún componente introduce
+ * valores sueltos (verificado por tests/unit/tokens.test.js).
+ *
+ * PROBLEMA DE DISEÑO QUE RESUELVE ESTE SISTEMA
+ * El negocio tiene dos caras opuestas: urgencia (conductor varado, necesita
+ * el botón YA) y especialización premium (BMW, Audi, Mercedes, reprogramación
+ * BMS). Resueltas mal, se anulan: el rojo repartido por la página se ve
+ * barato, y el minimalismo elegante esconde la acción que salva la venta.
+ *
+ * La solución es jerárquica, no decorativa:
+ *   · El lienzo es sobrio y oscuro — ahí vive la sofisticación.
+ *   · El rojo es el color de marca: acentos, botones, datos técnicos — y
+ *     coincide con el rojo del logo original, coherencia de identidad.
+ *   · El botón de auxilio usa el MISMO rojo (ya no hay un segundo color
+ *     "reservado" aparte): lo distingue un anillo de pulso, no ser el único
+ *     elemento rojo de la pantalla. La escasez de color no era el objetivo
+ *     en sí — era una forma de gritar "esto es urgente"; el pulso cumple
+ *     esa misma función sin exigir un segundo acento en toda la paleta.
+ * ========================================================================= */
+
+:root {
+  /* --- Marca -----------------------------------------------------------
+   * Grafito neutro, no azul. El lienzo azul-marino de la v1 competía en
+   * temperatura con el ámbar y el rojo; un grafito casi sin matiz los deja
+   * ser el único color que salta. Es la lectura "gris" que pide el negocio,
+   * sin volver genérico: automotriz/industrial (herramientas, autopartes)
+   * usa grafito + un acento de alto contraste por la misma razón.
+   * --------------------------------------------------------------------- */
+  --brand-950: #0F0F10;
+  --brand-900: #1A1A1C;
+  --brand-800: #232326;
+  --brand-700: #35353A;
+  --brand-600: #4A4A52;
+  --brand-500: #6B6B74;
+  --brand-200: #C6C6CC;
+  --brand-100: #E8E8EB;
+
+  /* --- Energía (rojo) --------------------------------------------------
+   * Color de marca — coherente con el rojo del logo original. Los nombres
+   * de los tokens (energy-*) se mantuvieron sin cambio a propósito: son
+   * los mismos que ya consume cada componente del sitio, así que
+   * recalibrar solo estos 5 valores basta para repintar todo el sitio sin
+   * tocar (ni arriesgar olvidar) cada punto de consumo por separado.
+   *
+   * El rojo se comporta distinto al ámbar que reemplaza: a la misma
+   * saturación tiene menor luminosidad, así que la escala no es un value
+   * swap 1:1 — 300 pasa a ser el tono "claro" que antes cubría 400 (texto
+   * y acentos sobre fondo oscuro), dejando 400 libre para ser el rojo
+   * sólido real (botones, rellenos) sin perder legibilidad en ningún rol.
+   * energy-400 = urgent-600 a propósito: es el mismo rojo, no dos rojos
+   * parecidos por coincidencia — ver el bloque "Urgencia" más abajo.
+   * --------------------------------------------------------------------- */
+  --energy-600: #7A1519;
+  --energy-500: #9E1F22;
+  --energy-400: var(--urgent-600);
+  --energy-300: #F0776C;
+  --energy-100: #FBE2E1;
+
+  /* --- Urgencia --------------------------------------------------------
+   * El botón de auxilio usa este mismo rojo de marca (ya no un segundo
+   * color aparte) — lo distingue el anillo de pulso (.gps-cta::after,
+   * .btn--urgent::after), no ser el único elemento rojo de la pantalla.
+   * --------------------------------------------------------------------- */
+  --urgent-700: #991B1B;
+  --urgent-600: #C1272D;
+  --urgent-500: #DC2F35;
+
+  --success-600: #15803D;
+  --success-100: #DCFCE7;
+  --warning-500: #C2660C;
+
+  /* Verde de marca de WhatsApp: se usa solo en el glifo de WhatsApp, para que
+     el ícono se reconozca al instante. No es un acento decorativo del sitio. */
+  --whatsapp: #25D366;
+
+  /* --- Neutros -------------------------------------------------------------
+   * Con matiz azulado, no grises puros: armonizan con la marca y evitan el
+   * aspecto de plantilla genérica. El papel es hueso, no blanco puro — el
+   * blanco #FFF sobre pantalla brillante cansa y abarata.
+   * --------------------------------------------------------------------- */
+  --ink-900: #0B1220;
+  --ink-800: #1C2536;
+  --ink-600: #47536B;
+  --ink-500: #64748B;
+  --ink-400: #94A3B8;
+  --ink-300: #CBD5E1;
+  --paper:   #FFFFFF;
+  --paper-2: #F8FAFC;
+  --paper-3: #F1F5F9;
+  --line:    #E2E8F0;
+  --line-strong: #CBD5E1;
+
+  /* --- Tipografía ----------------------------------------------------------
+   * Manrope: geométrica y limpia, con contrapunto humanista. Se sostiene en
+   * titular grande sin volverse fría, y tiene cobertura completa de acentos
+   * del español. Una sola familia variable en vez de dos: menos peso y
+   * jerarquía por grosor, no por contraste de fuentes.
+   *
+   * Escala de tercera mayor (1.25) — suficiente contraste entre niveles para
+   * que la jerarquía se lea de un vistazo, sin saltos bruscos.
+   * --------------------------------------------------------------------- */
+  --font-sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Libre Franklin", "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "SFMono-Regular", ui-monospace, "Cascadia Mono", Menlo, monospace;
+
+  --text-xs:   0.75rem;    /* 12px — etiquetas, notas legales */
+  --text-sm:   0.875rem;   /* 14px — apoyo, metadatos */
+  --text-base: 1rem;       /* 16px — cuerpo. Nunca menos en móvil */
+  --text-lg:   1.125rem;   /* 18px — entradilla */
+  --text-xl:   1.375rem;   /* 22px — subtítulos */
+  --text-2xl:  1.75rem;    /* 28px — títulos de sección */
+  --text-3xl:  2.25rem;    /* 36px — titular móvil */
+  --text-4xl:  3rem;       /* 48px — titular escritorio */
+  --text-5xl:  3.75rem;    /* 60px — cifras destacadas */
+
+  --leading-tight: 1.1;
+  --leading-snug:  1.3;
+  --leading-body:  1.6;
+
+  /* Titulares grandes necesitan tracking negativo: a tamaño display, el
+     espaciado por defecto se ve suelto y amateur. */
+  --tracking-tight: -0.03em;
+  --tracking-snug:  -0.015em;
+  --tracking-wide:  0.08em;   /* para versalitas y etiquetas */
+
+  /* --- Espaciado — múltiplos de 4px ---------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-full: 999px;
+
+  /* --- Elevación -----------------------------------------------------------
+   * Sombras en dos capas (contacto + difusión), como la luz real. Una sola
+   * sombra difusa es la marca visual del template barato.
+   * --------------------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgb(11 18 32 / 0.06),
+               0 1px 3px rgb(11 18 32 / 0.10);
+  --shadow-md: 0 2px 4px rgb(11 18 32 / 0.06),
+               0 8px 16px rgb(11 18 32 / 0.08);
+  --shadow-lg: 0 4px 8px rgb(11 18 32 / 0.06),
+               0 16px 32px rgb(11 18 32 / 0.12);
+  --shadow-xl: 0 8px 16px rgb(11 18 32 / 0.08),
+               0 32px 64px rgb(11 18 32 / 0.16);
+  /* La sombra del botón de auxilio lleva el tinte del propio rojo: el halo
+     neutro corta el objeto del fondo, el tintado lo integra. */
+  --shadow-urgent: 0 4px 12px rgb(193 39 45 / 0.28),
+                   0 12px 32px rgb(193 39 45 / 0.22);
+  /* Mismo rojo que --shadow-urgent (193 39 45 = urgent-600 = energy-400
+     ahora): energy-400 ya no es un color aparte, así que su sombra tampoco. */
+  --shadow-energy: 0 4px 12px rgb(193 39 45 / 0.25);
+
+  /* --- Objetivo táctil -----------------------------------------------------
+   * 44px es el mínimo de las guías de Apple. La acción principal usa 56px:
+   * un conductor con prisa, de pie junto al auto y a veces con lluvia, falla
+   * objetivos del tamaño mínimo.
+   * --------------------------------------------------------------------- */
+  --touch-min: 44px;
+  --touch-primary: 56px;
+
+  /* --- Motion ----------------------------------------------------------
+   * Curva y duración únicas para hover/color: el resto del movimiento
+   * (botones, sheet, toasts) usa física de resorte en motion/springs.js,
+   * no CSS. Estos tokens cubren solo las transiciones declarativas de
+   * color y borde.
+   * --------------------------------------------------------------------- */
+  --duration-fast: 160ms;
+  --duration-base: 200ms;
+  --duration-slow: 550ms;
+  --ease-standard: ease;
+  /* "expo-out": arranca rápido, se asienta suave. Los easings nativos de CSS
+     (ease, ease-out) son débiles — les falta el golpe que hace que una
+     animación se sienta intencional. Para momentos raros/de una sola vez
+     (entrada del hero), no para microinteracciones frecuentes. */
+  --ease-out-strong: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --container: 1180px;
+  --container-narrow: 720px;
+
+  --z-sticky: 30;
+  --z-overlay: 40;
+  --z-sheet: 50;
+  --z-toast: 60;
+}

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Servicios: Auxilio e Instalación a Domicilio | CambiaTuBatería Perú</title>
+<meta name="description" content="Auxilio mecánico de batería, instalación a domicilio, diagnóstico de alternador y reprogramación BMS en Lima y Callao.">
+<meta name="theme-color" content="#0F0F10">
+<link rel="canonical" href="https://cambiatubateriaperu.com/servicios.html">
+
+<!-- Google tag (gtag.js) — Google Ads AW-18461995323. Consent Mode arranca
+     denegado (analytics_storage: denied); cookie-consent.js lo pasa a
+     'granted' solo si el usuario acepta el banner (Ley 29733, Perú). -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { analytics_storage: 'denied' });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18461995323"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config', 'AW-18461995323');
+</script>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.ico?v=2" sizes="any">
+<link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png?v=2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Libre+Franklin:wght@700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/v2/tokens.css?v=22">
+<link rel="stylesheet" href="assets/css/v2/base.css?v=22">
+<link rel="stylesheet" href="assets/css/v2/nav.css?v=22">
+<link rel="stylesheet" href="assets/css/v2/layout.css?v=22">
+<link rel="stylesheet" href="assets/css/v2/components.css?v=22">
+<link rel="stylesheet" href="assets/css/v2/sections.css?v=22">
+<!-- Sin JavaScript: revela de una el contenido editable desde el panel (ver base.css, regla data-contenido-listo) — sin JS nadie pone ese atributo, y sin esta contra-regla se quedaria invisible para siempre. -->
+<noscript><style>[data-cabecera-rol],[data-servicio-slug],[data-foto-slug]:not([data-foto-slug="hero"]){visibility:visible!important}</style></noscript>
+</head>
+<body>
+
+<a href="#contenido" class="visually-hidden">Saltar al contenido principal</a>
+
+<!-- ========================== FRANJA SUPERIOR ========================== -->
+<div class="topbar">
+  <div class="container container--flush-left topbar__inner">
+    <span><strong>Batería a domicilio</strong> · Lima Metropolitana y Callao · Instalación incluida</span>
+  </div>
+</div>
+
+<!-- ============================ NAVEGACIÓN ============================ -->
+<nav class="nav" aria-label="Navegación principal">
+  <div class="container container--flush-left">
+    <div class="nav__inner">
+      <a data-marca-rol="nombre" href="index.html" class="nav__brand" data-testid="nav-brand">
+        <img data-marca-rol="logo" class="nav__logo" src="assets/img/icons/nav-logo.png" alt="" aria-hidden="true" width="239" height="120">
+        <span class="nav__brand-text">
+          <span class="nav__brand-name">CambiaTuBatería</span>
+          <span class="nav__brand-tag">Perú</span>
+        </span>
+      </a>
+
+      <ul class="nav__links">
+        <li><a class="nav__link" href="index.html" data-testid="nav-link-inicio">Inicio</a></li>
+        <li><a class="nav__link" href="catalogo.html" data-testid="nav-link-catalogo">Catálogo</a></li>
+        <li><a class="nav__link" href="servicios.html" aria-current="page" data-testid="nav-link-servicios">Servicios</a></li>
+        <li><a class="nav__link" href="cobertura.html" data-testid="nav-link-cobertura">Cobertura</a></li>
+        <li><a class="nav__link" href="nosotros.html" data-testid="nav-link-nosotros">Nosotros</a></li>
+        <li><a class="nav__link" href="contacto.html" data-testid="nav-link-contacto">Contacto</a></li>
+      </ul>
+
+      <!-- Buscador global. Es un formulario GET de verdad: en cualquier página
+           que no sea el catálogo funciona sin JavaScript (envía a
+           catalogo.html?q=...). En el catálogo lo intercepta catalog.js y
+           filtra en vivo, sin recargar. -->
+      <form class="nav__search" role="search" action="catalogo.html" method="get" data-testid="nav-search">
+        <span class="nav__search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <label class="visually-hidden" for="buscador-input">Buscar batería por nombre o marca</label>
+        <input type="search" id="buscador-input" name="q" class="nav__search-input" data-testid="buscador-input"
+               placeholder="Buscar batería: Etna, Bosch, HL-11…" autocomplete="off"
+               role="combobox" aria-expanded="false" aria-controls="nav-search-panel"
+               aria-autocomplete="list" aria-haspopup="listbox">
+        <button type="button" class="nav__search-clear" data-testid="buscador-limpiar"
+                aria-label="Limpiar búsqueda" hidden>&times;</button>
+        <!-- Panel de resultados: las baterías que coinciden, con foto y modelo,
+             sin salir de la página en la que está el visitante. -->
+        <div class="nav__search-panel" id="nav-search-panel" data-testid="nav-search-panel"
+             role="listbox" aria-label="Baterías que coinciden" hidden></div>
+      </form>
+
+      <div class="nav__actions">
+        <a data-whatsapp-role="tel" href="tel:+51936956877" class="nav__phone" data-testid="nav-phone">
+          <span aria-hidden="true">📞</span> 936 956 877
+        </a>
+        <button type="button" class="nav__toggle" data-nav-toggle
+                aria-expanded="false" aria-controls="nav-panel" aria-label="Abrir menú">
+          <span class="nav__toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="nav__panel" id="nav-panel" data-nav-panel hidden>
+      <a class="nav__link" href="index.html">Inicio</a>
+      <a class="nav__link" href="catalogo.html">Catálogo</a>
+      <a class="nav__link" href="servicios.html" aria-current="page">Servicios</a>
+      <a class="nav__link" href="cobertura.html">Cobertura</a>
+      <a class="nav__link" href="nosotros.html">Nosotros</a>
+      <a class="nav__link" href="contacto.html">Contacto</a>
+      <div class="nav__panel-cta">
+        <a data-whatsapp-role="tel" href="tel:+51936956877" class="btn btn--primary btn--block">Llamar ahora</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main id="contenido">
+
+<header class="hero hero--blade" style="padding-block:var(--space-12) var(--space-10)" data-testid="page-header">
+  <div class="container">
+    <div class="hero__inner">
+      <span class="eyebrow">Servicios</span>
+      <h1 class="hero__title" style="font-size:var(--text-3xl)" data-cabecera-rol="servicios-titulo">Todo lo que hacemos, donde estés</h1>
+      <p class="hero__lead" data-cabecera-rol="servicios-bajada">No solo vendemos baterías: llegamos, diagnosticamos e instalamos.</p>
+    </div>
+  </div>
+</header>
+<section class="section section--muted" data-testid="section-servicios-lista">
+  <div class="container">
+    <div class="grid grid--halves" style="margin-bottom:var(--space-10)">
+      <div class="media-frame-wrap">
+        <img src="assets/img/optimizadas/servicios-instalacion.jpg" data-foto-slug="servicios" alt="Persona conectando cables de paso a la batería de un auto estacionado en la calle"
+             width="900" height="1200" loading="lazy" class="media-frame">
+      </div>
+      <div class="section-head" style="margin-bottom:0">
+        <span class="eyebrow">Cómo trabajamos</span>
+        <h2 class="section-head__title" data-cabecera-rol="servicios-trabajo-titulo">El mismo técnico diagnostica, instala y se lleva la usada</h2>
+        <p class="section-head__lead" data-cabecera-rol="servicios-trabajo-bajada">
+          Nada se coordina por partes: quien llega a tu ubicación es quien resuelve
+          todo, con la herramienta y el stock para no tener que volver una segunda vez.
+        </p>
+      </div>
+    </div>
+    <div class="grid grid--cards">
+      <article class="card" id="auxilio" data-servicio-slug="auxilio"><span class="card__icon" aria-hidden="true">
+          <!-- Rayo (energía/batería): mismo ícono que en la fila de servicios de
+               la landing. Reemplaza al ícono numérico anterior (un reloj). -->
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M13 2L3 14h6l-1 8 10-12h-6l1-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h3 class="card__title">Auxilio a domicilio</h3>
+        <p class="card__text">Tu auto no arranca y estás varado. Llegamos con la batería correcta y la instalamos ahí mismo.</p></article>
+      <article class="card" id="instalacion" data-servicio-slug="instalacion"><span class="card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M18.3333 3.6667V7.0253" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.6666 20.9999V15C7.6666 13.8954 8.5621 13 9.6666 13C10.7712 13 11.6666 13.8954 11.6666 15V20.9999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 13H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3.54 8.6L12 2.3333L20.4599 8.6C20.7999 8.852 20.9999 9.2493 20.9999 9.672V18.3333C20.9999 19.8066 19.8066 20.9999 18.3333 20.9999H5.6667C4.1933 20.9999 3 19.8066 3 18.3333V9.672C3 9.2493 3.2 8.852 3.54 8.6Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h3 class="card__title">Instalación a domicilio</h3>
+        <p class="card__text">Sin costo aparte. El técnico instala, verifica el arranque y se lleva la batería usada.</p></article>
+      <article class="card" id="diagnostico" data-servicio-slug="diagnostico"><span class="card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3.6667V6.3333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18.836 6.4973L16.9493 8.384" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21.6666 13.3333H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5.1641 6.4973L11.0574 12.3906" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2.3333 13.3333H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.6035 4.2804C9.66 3.8837 10.8048 3.6667 12 3.6667C17.3386 3.6667 21.6666 7.9946 21.6666 13.3333C21.6666 16.0026 20.5853 18.42 18.836 20.1693L16.9506 18.284" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.0506 18.2826L5.1653 20.1679C3.416 18.4186 2.3333 16.0026 2.3333 13.332C2.3333 12.137 2.5503 10.9926 2.9467 9.9364" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 15C12.92 15 13.6666 14.2533 13.6666 13.3333C13.6666 12.4133 12.92 11.6666 12 11.6666C11.08 11.6666 10.3333 12.4133 10.3333 13.3333C10.3333 14.2533 11.08 15 12 15Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h3 class="card__title">Diagnóstico de carga</h3>
+        <p class="card__text">A veces el problema no es la batería sino el alternador. Lo medimos antes de venderte una nueva.</p></article>
+      <article class="card" data-servicio-slug="bms"><span class="card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M20 9.6C20 5.6 18.4 4 14.4 4H9.6C5.6 4 4 5.6 4 9.6V14.4C4 18.4 5.6 20 9.6 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.35 8C15.8 7.3 14.88 7 13.5 7H10.5C8 7 7 8 7 10.5V13.5C7 14.88 7.3 15.8 7.99 16.35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.01001 4V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 4V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 4V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M20 8H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.01001 20V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 8H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 16H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.71 18.59C17.5881 18.59 18.3 17.8782 18.3 17C18.3 16.1219 17.5881 15.41 16.71 15.41C15.8319 15.41 15.12 16.1219 15.12 17C15.12 17.8782 15.8319 18.59 16.71 18.59Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M11.41 17.46V16.53C11.41 15.98 11.86 15.53 12.41 15.53C13.37 15.53 13.76 14.85 13.28 14.02C13 13.54 13.17 12.92 13.65 12.65L14.56 12.12C14.98 11.87 15.52 12.02 15.77 12.44L15.83 12.54C16.31 13.37 17.09 13.37 17.57 12.54L17.63 12.44C17.88 12.02 18.42 11.88 18.84 12.12L19.75 12.65C20.23 12.93 20.4 13.54 20.12 14.02C19.64 14.85 20.03 15.53 20.99 15.53C21.54 15.53 21.99 15.98 21.99 16.53V17.46C21.99 18.01 21.54 18.46 20.99 18.46C20.03 18.46 19.64 19.14 20.12 19.97C20.4 20.45 20.23 21.07 19.75 21.34L18.84 21.87C18.42 22.12 17.88 21.97 17.63 21.55L17.57 21.45C17.09 20.62 16.31 20.62 15.83 21.45L15.77 21.55C15.52 21.97 14.98 22.11 14.56 21.87L13.65 21.34C13.17 21.06 13 20.45 13.28 19.97C13.76 19.14 13.37 18.46 12.41 18.46C11.86 18.47 11.41 18.02 11.41 17.46Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h3 class="card__title">Reprogramación BMS</h3>
+        <p class="card__text">Para vehículos de gama alta. Escáner OBD2 incluido, sin cargo adicional.</p></article>
+      <article class="card" id="reciclaje" data-servicio-slug="reciclaje"><span class="card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8.01001 14.5101C8.19001 14.8101 8.41 15.0901 8.66 15.3401C10.5 17.1801 13.49 17.1801 15.34 15.3401C16.09 14.5901 16.52 13.64 16.66 12.67" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.33997 11.3301C7.47997 10.3501 7.90997 9.41003 8.65997 8.66003C10.5 6.82003 13.49 6.82003 15.34 8.66003C15.6 8.92003 15.81 9.20005 15.99 9.49005" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.81995 17.18V14.51H10.4899" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.18 6.82007V9.49005H13.51" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h3 class="card__title">Reciclaje del casco</h3>
+        <p class="card__text">Entregas la usada, descuentas S/ 40 y nosotros la disponemos como corresponde.</p></article>
+      <article class="card" id="flotas" data-servicio-slug="flotas"><span class="card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6.70001 18H4.15002C2.72002 18 2 17.28 2 15.85V4.15002C2 2.72002 2.72002 2 4.15002 2H8.45001C9.88001 2 10.6 2.72002 10.6 4.15002V6" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17.3699 8.41998V19.58C17.3699 21.19 16.57 22 14.96 22H9.11993C7.50993 22 6.69995 21.19 6.69995 19.58V8.41998C6.69995 6.80998 7.50993 6 9.11993 6H14.96C16.57 6 17.3699 6.80998 17.3699 8.41998Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13.3999 6V4.15002C13.3999 2.72002 14.1199 2 15.5499 2H19.8499C21.2799 2 21.9999 2.72002 21.9999 4.15002V15.85C21.9999 17.28 21.2799 18 19.8499 18H17.3699" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 11H14" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 14H14" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 22V19" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <h3 class="card__title">Flotas y empresas</h3>
+        <p class="card__text">Mantenimiento programado para flotas. Cotización según cantidad de unidades.</p></article>
+    </div>
+  </div>
+</section>
+<section class="section cta-final" data-testid="section-cta-final">
+  <!-- Antes era solo un border-top de 1px sobre el mismo fondo claro de
+       arriba: vacio estatico. Mismo glifo y misma jerarquia que en el home
+       (WhatsApp primero, grande; Llamar como alternativa) - consistente en
+       todo el sitio, no solo en la portada. -->
+  <svg class="cta-final__deco" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+  <div class="container container--narrow" style="text-align:center">
+    <h2 class="section-head__title" style="margin-bottom:var(--space-3)">¿Necesitas ayuda ahora?</h2>
+    <p class="section-head__lead" style="margin-inline:auto">
+      Escríbenos por WhatsApp (el botón verde de abajo a la derecha) o llámanos directo.
+    </p>
+    <div class="section-actions">
+      <a data-whatsapp-role="tel" href="tel:+51936956877" class="btn btn--primary btn--lg">936 956 877</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ====================== BOTONES FLOTANTES ====================== -->
+<div class="floating-cta" data-testid="floating-cta">
+  <a data-whatsapp-role="wa" href="https://wa.me/51936956877" class="floating-cta__btn floating-cta__btn--whatsapp" data-testid="floating-cta-whatsapp"
+     target="_blank" rel="noopener" aria-label="Chatea por WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span class="floating-cta__label">Chatea por WhatsApp</span></a>
+  <a data-whatsapp-role="tel" href="tel:+51936956877" class="floating-cta__btn floating-cta__btn--llamar" data-testid="floating-cta-llamar" aria-label="Llamar ahora"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.97 18.33C21.97 18.69 21.89 19.06 21.72 19.42C21.55 19.78 21.33 20.12 21.04 20.44C20.55 20.98 20.01 21.37 19.4 21.62C18.8 21.87 18.15 22 17.45 22C16.43 22 15.34 21.76 14.19 21.27C13.04 20.78 11.89 20.12 10.75 19.29C9.6 18.45 8.51 17.52 7.47 16.49C6.44 15.45 5.51 14.36 4.68 13.22C3.86 12.08 3.2 10.94 2.72 9.81C2.24 8.67 2 7.58 2 6.54C2 5.86 2.12 5.21 2.36 4.61C2.6 4 2.98 3.44 3.51 2.94C4.15 2.31 4.85 2 5.59 2C5.87 2 6.15 2.06 6.4 2.18C6.66 2.3 6.89 2.48 7.07 2.74L9.39 6.01C9.57 6.26 9.7 6.49 9.79 6.71C9.88 6.92 9.93 7.13 9.93 7.32C9.93 7.56 9.86 7.8 9.72 8.03C9.59 8.26 9.4 8.5 9.16 8.74L8.4 9.53C8.29 9.64 8.24 9.77 8.24 9.93C8.24 10.01 8.25 10.08 8.27 10.16C8.3 10.24 8.33 10.3 8.35 10.36C8.53 10.69 8.84 11.12 9.28 11.64C9.73 12.16 10.21 12.69 10.73 13.22C11.27 13.75 11.79 14.24 12.32 14.69C12.84 15.13 13.27 15.43 13.61 15.61C13.66 15.63 13.72 15.66 13.79 15.69C13.87 15.72 13.95 15.73 14.04 15.73C14.21 15.73 14.34 15.67 14.45 15.56L15.21 14.81C15.46 14.56 15.7 14.37 15.93 14.25C16.16 14.11 16.39 14.04 16.64 14.04C16.83 14.04 17.03 14.08 17.25 14.17C17.47 14.26 17.7 14.39 17.95 14.56L21.26 16.91C21.52 17.09 21.7 17.3 21.81 17.55C21.91 17.8 21.97 18.05 21.97 18.33Z" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke-miterlimit="10"/></svg></a>
+</div>
+
+<!-- ============================== PIE ============================== -->
+<footer class="footer" data-testid="footer">
+  <div class="container">
+    <div class="footer__top">
+      <a data-marca-rol="nombre" href="index.html" class="footer__brand" aria-label="CambiaTuBatería Perú — inicio">
+        <img data-marca-rol="logo" class="footer__logo" src="assets/img/icons/nav-logo.png" alt="" aria-hidden="true" width="239" height="120">
+        <span class="footer__brand-text">CambiaTuBatería <em>Perú</em></span>
+      </a>
+      <div class="footer__social">
+        <a data-whatsapp-role="wa" class="footer__social-link" href="https://wa.me/51936956877" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer__grid">
+      <div>
+        <h3 class="footer__title">Servicio</h3>
+        <ul class="footer__list">
+          <li><a href="servicios.html">Auxilio a domicilio</a></li>
+          <li><a href="catalogo.html">Catálogo de baterías</a></li>
+          <li><a href="servicios.html#instalacion">Instalación a domicilio</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__title">Cobertura</h3>
+        <ul class="footer__list">
+          <li><a href="cobertura.html">Lima Metropolitana</a></li>
+          <li><a href="cobertura.html#callao">Callao</a></li>
+          <li><a href="cobertura.html#horarios">Horarios de atención</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__title">Empresa</h3>
+        <ul class="footer__list">
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="index.html#preguntas">Preguntas frecuentes</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="footer__title">Contacto</h3>
+        <ul class="footer__list">
+          <li><a data-whatsapp-role="tel" href="tel:+51936956877">936 956 877</a></li>
+          <li><a data-whatsapp-role="wa" href="https://wa.me/51936956877" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> WhatsApp</a></li>
+          <li><a data-contacto-rol="email-link" href="mailto:contacto@cambiatubateriaperu.com">Escríbenos</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__legal">
+      <span>© 2026 CambiaTuBatería Perú. Todos los derechos reservados.</span>
+      <nav class="footer__legal-links" aria-label="Enlaces legales">
+        <a href="cookies.html">Política de Cookies</a>
+        <a href="aviso-legal.html">Aviso legal</a>
+        <a href="privacidad.html">Privacidad</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="assets/js/main.js?v=22"></script>
+
+</body>
+</html>

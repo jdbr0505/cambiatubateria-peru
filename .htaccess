@@ -1,0 +1,151 @@
+# ========= BLOQUEO DE ARCHIVOS DE ENTORNO =========
+# La raíz del proyecto ES el DocumentRoot, así que sin esta regla el archivo
+# .env con las credenciales de MySQL sería descargable en https://dominio/.env
+<FilesMatch "^\.env">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+# ==================================================
+
+# ========= LOGS DE ERROR DE PHP =========
+# PHP puede volver a escribir un "error_log" (sin extensión, log_errors=On sin
+# error_log=ruta.ini) en cualquier carpeta donde ocurra un error — no depende
+# de que alguien lo suba. Uno llegó a filtrar la ruta absoluta del servidor
+# (/home/<usuario_cpanel>/public_html/...) en un stack trace público. Defensa
+# en profundidad: aunque reaparezca, que nunca sea descargable por HTTP.
+<FilesMatch "^error_log$|\.log$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+# ==================================================
+
+# ========= CARPETAS DE DESARROLLO NO PÚBLICAS =========
+# La raíz del proyecto ES el DocumentRoot, así que sin estas reglas Apache
+# serviría los tests, el plan de implementación y las demos como archivos
+# descargables. Los tests además revelan la estructura interna de la API.
+RedirectMatch 404 ^/(tests|scripts|docs|node_modules)(/|$)
+
+# Ningún archivo de prueba debe ser accesible, esté donde esté.
+<FilesMatch "\.(test|spec)\.js$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Archivos de configuración y metadatos del proyecto.
+<FilesMatch "^(package(-lock)?\.json|jsconfig\.json|playwright\.config\.js|PROJECT_INDEX\.(md|json)|CLAUDE\.md|README\.md)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+# ======================================================
+
+# ========= TIPOS MIME Y PWA =========
+# Apache de cPanel no siempre trae el MIME del manifest. Sin el tipo correcto,
+# Chrome ignora el manifest y el sitio deja de ser instalable.
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType image/x-icon .ico
+</IfModule>
+
+# El Service Worker debe poder controlar toda la carpeta public, no solo la
+# suya. Esta cabecera lo autoriza; sin ella el scope queda limitado a /assets.
+<IfModule mod_headers.c>
+  <FilesMatch "sw\.js$">
+    Header set Service-Worker-Allowed "/"
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+# ====================================
+
+# ========= CONTROL DE CACHÉ =========
+# El sitio no tiene build step ni versionado en las URLs de assets, así que el
+# navegador reusaba CSS/JS viejos tras cada despliegue: el clásico "subí los
+# cambios pero no se ven" que obligaba a Ctrl+Shift+R. HTML, CSS y JS revalidan
+# siempre (no-cache): el navegador manda un condicional barato y recibe 304 si
+# nada cambió, o la versión nueva apenas se despliega. Imágenes y fuentes sí se
+# cachean (cambian poco y pesan); un día basta para que un reemplazo se vea sin
+# quedar clavado un año con el mismo nombre de archivo.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|css|js|webmanifest)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(jpg|jpeg|png|webp|avif|gif|svg|ico|woff|woff2)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+</IfModule>
+# ====================================
+
+RewriteEngine On
+
+# ========= LOGIN CANÓNICO =========
+# Redirige peticiones REALES a /adminbateria/login(.html) hacia /login (sin loop)
+RewriteCond %{THE_REQUEST} \s/+adminbateria/login(?:\.html)?\s [NC]
+RewriteRule ^adminbateria/login(?:\.html)?$ /login [R=301,L]
+
+# /login -> target real del login (PRUEBA 1: carpeta)
+RewriteCond %{DOCUMENT_ROOT}/adminbateria/login -d
+RewriteRule ^login/?$ adminbateria/login/ [L,QSA]
+
+# /login -> target real del login (PRUEBA 2: archivo .html)
+RewriteCond %{DOCUMENT_ROOT}/adminbateria/login.html -f
+RewriteRule ^login/?$ adminbateria/login.html [L,QSA]
+
+# /login -> target real del login (PRUEBA 3: archivo .php)
+RewriteCond %{DOCUMENT_ROOT}/adminbateria/login.php -f
+RewriteRule ^login/?$ adminbateria/login.php [L,QSA]
+# ==================================
+
+# --- Fix assets públicos cuando no existan en raíz
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(assets|css|js|img|images|fonts|vendor|static)/(.*)$ pagbateria/public/$1/$2 [L,QSA]
+
+# Raíz -> index del sitio público (rediseño v2, index.php sigue accesible en /index.php)
+RewriteRule ^$ pagbateria/public/index.html [L]
+
+# Curar URLs antiguas visibles que apuntaban a HTML.
+# La condición %{THE_REQUEST} es obligatoria, no decorativa: guarda la línea de
+# petición HTTP original y NO cambia en las reescrituras internas. Sin ella, la
+# regla de arriba reescribe / a pagbateria/public/index.html, Apache reprocesa
+# el .htaccess desde el inicio con esa URI, estas reglas la devuelven a / con un
+# 301, y el ciclo se repite: ERR_TOO_MANY_REDIRECTS. Mismo patrón que el login.
+RewriteCond %{THE_REQUEST} \s/+pagbateria/public/?[\s?] [NC]
+RewriteRule ^pagbateria/public/?$ / [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+pagbateria/public/index\.html[\s?] [NC]
+RewriteRule ^pagbateria/public/index\.html$ / [R=301,L]
+
+# Reescritura general hacia /pagbateria/public (excluye admin)
+RewriteCond %{REQUEST_URI} !^/pagbateria/public/ [NC]
+RewriteCond %{REQUEST_URI} !^/adminbateria/ [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ pagbateria/public/$1 [L,QSA]
+
+# Archivos especiales (opcional)
+RewriteRule ^(favicon\.ico|robots\.txt|sitemap\.xml)$ pagbateria/public/$1 [L,QSA]
+
+# El rediseño v2 se sirve como index.html. Se prioriza sobre index.php (el
+# sitio anterior, que se conserva accesible en /index.php por si hay que volver).
+# Antes el orden era "index.php index.html", que ocultaba el HTML nuevo.
+DirectoryIndex index.html index.php
+Options -Indexes -MultiViews

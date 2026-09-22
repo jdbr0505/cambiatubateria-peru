@@ -1,0 +1,369 @@
+/* Panel Administrativo - Estilos Claro (fondo blanco) */
+*{box-sizing:border-box}
+:root{
+  --bg:#F8FAFC;        /* fondo suave */
+  --panel:#ffffff;     /* tarjetas */
+  --border:#E2E8F0;    /* línea neutra, matiz azulado */
+  --muted:#64748B;     /* texto secundario */
+  --text:#0B1220;      /* texto principal */
+  --accent:#C1272D;    /* rojo — color de marca (mismo tono que --danger: ya no hace falta distinguirlos) */
+  --accent-2:#7A1519;  /* rojo oscuro */
+  --danger:#C1272D;    /* rojo urgencia, mismo tono que --accent ahora */
+  --success:#15803D;   /* verde */
+  --warning:#F0776C;   /* rojo claro */
+  --soft:#F1F5F9;      /* fondo inputs */
+}
+
+html,body{height:100%}
+body{
+  margin:0; font-family:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg); color:var(--text);
+  padding-top:104px; /* offset del header fijo (logo grande) */
+  overflow-x:hidden; /* evita que el layout se salga a la derecha */
+}
+
+.container{max-width:1200px;margin:0 auto;padding:16px}
+
+/* Topbar */
+.admin-topbar{position:fixed;left:0;right:0;top:0;z-index:1000;background:#ffffffcc;backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.admin-topbar::before{content:none}
+.topbar-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:10px 0;min-height:96px}
+.brand{display:flex;align-items:center;gap:14px}
+.hamburger{display:none;margin-right:6px;border:1px solid var(--border);background:#fff;border-radius:10px;padding:8px 10px;cursor:pointer}
+.brand-logo{width:auto;height:auto;border-radius:10px;background:transparent;color:var(--accent-2);display:flex;align-items:center;justify-content:center;font-weight:700}
+.brand-name{font-family:"Libre Franklin","Manrope",sans-serif;font-weight:800;letter-spacing:.2px;font-size:18px}
+.brand-logo img{width:88px;height:88px;object-fit:contain;display:block}
+.env{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.env code{background:var(--soft);border:1px solid var(--border);padding:6px 10px;border-radius:999px;color:var(--accent-2)}
+.muted{opacity:.9;color:var(--muted)}
+
+/* Header actions: destacar Cerrar sesión en rojo */
+.admin-topbar #btnLogout{background:var(--danger);border-color:#b91c1c;color:#fff}
+.admin-topbar #btnLogout:hover{filter:brightness(1.05);transform:translateY(-1px)}
+
+/* Sidebar layout */
+.layout{display:grid;grid-template-columns:260px 1fr;gap:16px;margin-top:16px}
+.side-nav{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;height:fit-content;position:sticky;top:112px;box-shadow:0 12px 28px rgba(2,6,23,.06)}
+.side-nav h2{margin:0 0 12px;font-size:16px;color:var(--text)}
+.side-nav nav{display:flex;flex-direction:column;gap:6px}
+.side-nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;color:var(--text);text-decoration:none;border:1px solid transparent;position:relative}
+.side-nav a::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--border);display:inline-block}
+.side-nav a:hover{background:var(--soft);border-color:var(--border)}
+.side-nav a.active{background:linear-gradient(180deg, var(--accent), var(--accent-2));border-color:var(--accent-2);color:#ffffff;box-shadow:0 8px 22px rgba(122,21,25,.25)}
+.side-nav a.active::before{background:#ffffff}
+.content{display:block; overflow-x:hidden}
+
+/* Tabs visibility */
+.tab{display:none}
+.tab.active{display:block}
+
+/* Cards */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 14px 36px rgba(2,6,23,.08)}
+.card.item{margin-bottom:12px}
+main.content .card{margin-bottom:16px}
+
+/* Branding layout */
+.brand-layout{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}
+.form-grid{display:grid;grid-template-columns:repeat(2, minmax(200px,1fr));gap:12px}
+.form-grid .span-2{grid-column:1 / -1}
+.brand-preview{display:flex;flex-direction:column;gap:12px}
+.brand-preview .preview-wrap{border:2px dashed var(--border);border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:220px;background:var(--soft)}
+.brand-preview img{max-width:100%;max-height:220px;object-fit:contain}
+.brand-preview .preview-actions{display:flex;gap:8px;justify-content:flex-start}
+
+/* Header responsive tweaks */
+@media (max-width: 720px){
+  .brand-name{font-size:16px}
+  .brand-logo img{width:64px;height:64px}
+  .topbar-inner{min-height:84px}
+  .side-nav{top:96px}
+}
+
+/* ---------- Responsive layout ---------- */
+@media (max-width: 1024px){
+  .container{padding:12px}
+  .layout{grid-template-columns:1fr}
+  .side-nav{position:fixed; top:0; left:0; bottom:0; width:280px; margin:0; transform:translateX(-110%); transition:transform .25s ease; z-index:4000; overflow:auto}
+  .side-nav.open{transform:translateX(0)}
+  .hamburger{display:inline-block}
+  #headerControls{display:none}
+  .drawer-controls{display:block;margin:6px 0 10px}
+  .drawer-controls .btn{width:100%;font-size:13px;padding:8px 10px}
+  .drawer-controls code{display:block;margin:4px 0}
+  .drawer-controls #headerControls{display:block}
+  .form-grid{grid-template-columns:1fr}
+  .brand-layout{grid-template-columns:1fr}
+  main.content .card{margin-bottom:12px}
+}
+
+@media (max-width: 640px){
+  .env{gap:6px}
+  .env code{font-size:12px; padding:4px 8px}
+  .btn{padding:8px 10px}
+  .btn.sm{padding:4px 6px}
+  .grid{grid-template-columns:1fr}
+  #productsGrid .card > .row{min-width:unset; max-width:unset}
+  .brand-products-row{gap:8px}
+  .product-chip{min-width:180px; max-width:220px}
+  .brand-card{grid-template-columns:48px 1fr auto}
+  .brand-card .logo{width:48px;height:48px}
+  .admin-topbar{padding-left:0;padding-right:0}
+  .admin-footer{font-size:11px;padding:8px 0}
+  /* Hero (fondo de inicio) mobile adjustments */
+  #tab-hero .row{flex-direction:column;align-items:stretch}
+  #tab-hero label{width:100%}
+  #tab-hero input[type="text"],
+  #tab-hero input[type="file"],
+  #tab-hero textarea,
+  #tab-hero select{width:100%}
+  #tab-hero .btn{width:100%}
+  #tab-hero img{max-width:100%;height:auto}
+}
+
+/* Modals: ensure fit on small screens */
+@media (max-width: 768px){
+  .modal .modal-dialog{max-width:95vw}
+}
+
+/* Overlay for mobile menu */
+.menu-overlay{position:fixed;inset:0;background:rgba(2,6,23,.35);z-index:3500}
+
+/* Grid & Rows */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+
+/* Associate modal product grid */
+#modalAssociate #assocList{display:block}
+#modalAssociate .assoc-brand-section{margin-top:10px}
+#modalAssociate .assoc-grid{display:flex;flex-direction:row;gap:12px;overflow-x:auto;padding-bottom:6px;margin-top:6px}
+#modalAssociate .assoc-grid::-webkit-scrollbar{height:8px}
+#modalAssociate .assoc-grid::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}
+#modalAssociate .assoc-chip{flex:0 0 260px;display:flex;align-items:flex-start;gap:8px;padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff}
+#modalAssociate .assoc-chip:hover{box-shadow:0 4px 14px rgba(2,6,23,.08)}
+#modalAssociate .assoc-chip input{margin-top:4px}
+#modalAssociate .assoc-info strong{display:block;font-size:13px;color:#0f172a}
+
+/* Products grouped by brand: horizontal rows */
+.brand-section{overflow:hidden; width:100%; max-width:100%}
+.brand-section > h4{margin:0 0 10px;color:#0f172a}
+.brand-products-row{display:flex;flex-direction:row;gap:12px;overflow-x:auto;overflow-y:hidden;padding-bottom:6px;width:100%;max-width:100%;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.brand-products-row::-webkit-scrollbar{height:8px}
+.brand-products-row::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}
+.product-chip{flex:0 0 auto;display:flex;flex-direction:column;align-items:stretch;gap:6px;min-width:200px;max-width:250px;padding:6px 8px;border:1px solid var(--border);border-radius:8px;background:#fff;box-shadow:0 2px 8px rgba(2,6,23,.06);scroll-snap-align:start}
+.product-chip .chip-info{display:flex;flex-direction:column}
+.product-chip .chip-info strong{font-weight:600;color:#0f172a;font-size:13px;line-height:1.2}
+.product-chip .chip-info .muted{font-size:10px}
+.product-chip .btn.sm{padding:4px 8px}
+
+/* Thumbnails inside product chips */
+.product-chip .chip-thumb{width:100%;height:90px;object-fit:contain;border-radius:8px;border:1px solid var(--border);flex:0 0 auto;background:#f8fafc}
+.product-chip .chip-thumb + *{margin-top:6px}
+
+/* Global listado rows thumbnails */
+#productsGrid .card > .row .chip-thumb{width:100%;height:90px;object-fit:contain;border-radius:8px;border:1px solid var(--border);background:#f8fafc}
+#productsGrid .card > .row .chip-thumb + *{margin-top:6px}
+
+/* Global Listado (#productsGrid): emulate horizontal chips with existing markup */
+#productsGrid .card > h4{margin:0 0 10px;color:#0f172a;display:block}
+#productsGrid{display:block}
+#productsGrid .card{display:block;white-space:nowrap;overflow-x:auto;overflow-y:hidden;padding-bottom:6px;margin-bottom:12px;max-width:100%}
+#productsGrid .card > .row{display:inline-flex;flex-direction:column;white-space:normal;align-items:stretch;gap:6px;min-width:200px;max-width:250px;margin-right:8px;padding:6px 8px;border:1px solid var(--border);border-radius:8px;background:#fff;box-shadow:0 2px 8px rgba(2,6,23,.06)}
+#productsGrid .card > .row .muted{font-size:10px}
+
+/* In-tab list (#productsGrid2): force vertical stacking of brand sections */
+#productsGrid2{display:block}
+#productsGrid2 .card{display:block;margin-bottom:16px}
+
+/* Vehicles associated list layout */
+#assocGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px}
+#assocGrid .card{display:flex;flex-direction:column;gap:6px;padding:10px}
+#assocGrid .card .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start}
+
+/* Vehicles premium list layout */
+#vehiclesGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px}
+#vehiclesGrid .card{display:flex;flex-direction:column;gap:6px;padding:10px}
+#vehiclesGrid .card .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start}
+/* Vehículos Premium: botones de orden (flechas) en rojo */
+#tab-vehiculos .brand-actions .btn.sm{background:var(--accent);border-color:var(--accent-2);color:#fff}
+#tab-vehiculos .brand-actions .btn.sm:hover{filter:brightness(1.05)}
+
+/* Asociados: botón "+ Agregar compatibilidad" en verde */
+#btnAddFit{background:var(--success);border-color:#15803d;color:#fff}
+#btnAddFit:hover{filter:brightness(1.05)}
+
+/* Botones de "Agregar" o "Subir" en verde en todas las secciones solicitadas */
+#btnSiteUploadLogo,
+#btnHeroUpload,
+#smUploadBtn,
+#btnAddSlide,
+#btnAddAgent,
+#btnAddService,
+#btnAddBrand,
+#btnVehUpload,
+#btnVehAgregar,
+#btnAddUser,
+#btnAddBulletMision,
+#btnAddBulletVision,
+#peUploadBtn{
+  background: var(--success);
+  border-color: #15803d;
+  color: #fff;
+}
+#btnSiteUploadLogo:hover,
+#btnHeroUpload:hover,
+#smUploadBtn:hover,
+#btnAddSlide:hover,
+#btnAddAgent:hover,
+#btnAddService:hover,
+#btnAddBrand:hover,
+#btnVehUpload:hover,
+#btnVehAgregar:hover,
+#btnAddUser:hover,
+#btnAddBulletMision:hover,
+#btnAddBulletVision:hover,
+#peUploadBtn:hover{
+  filter: brightness(1.05);
+}
+
+/* Botones "Editar" (inyectados dinámicamente) en verde */
+.btn[data-action="edit"],
+.btn[data-vehaction="edit"]{
+  background: var(--success);
+  border-color: #15803d;
+  color: #fff;
+}
+.btn[data-action="edit"]:hover,
+.btn[data-vehaction="edit"]:hover{
+  filter: brightness(1.05);
+}
+
+/* Hero preview */
+.hero-preview{margin-top:12px}
+.hero-preview h4{margin:8px 0;color:#0f172a}
+.hero-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.hero-card{position:relative;border:1px solid var(--border);border-radius:12px;overflow:hidden;min-height:140px;background:#f3f4f6}
+.hero-card .bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.9)}
+.hero-card .overlay{position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.45), transparent)}
+.hero-card .title{position:absolute;left:10px;bottom:10px;color:#fff;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+
+/* Hero editor */
+.hero-editor{margin-top:16px}
+.hero-editor-actions{display:flex;justify-content:flex-end;margin-bottom:8px}
+.hero-editor-actions #btnAddSlide, 
+#tab-hero #btnAddSlide{display:none !important}
+/* Ocultar la fila de "Subir Fondo (hero)" solo dentro del tab Inicio */
+#tab-hero .card > .row:first-of-type{display:none !important}
+.hero-edit-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+/* Ocultar botón Eliminar en cada tarjeta del hero */
+#tab-hero .hero-edit-card .right .btn.danger{display:none !important}
+/* Ocultar el label/campo "Fondo (URL)" dentro de la columna izquierda */
+#tab-hero .hero-edit-card .left label:last-of-type{display:none !important}
+.hero-edit-card .thumb{border-radius:10px;overflow:hidden;min-height:120px;background:#f3f4f6;display:flex;align-items:center;justify-content:center}
+.hero-edit-card .thumb img{width:100%;height:140px;object-fit:cover}
+.hero-edit-card .row{display:flex;gap:12px;align-items:flex-start}
+.hero-edit-card .left{flex:1;min-width:0}
+.hero-edit-card .right{display:flex;flex-direction:column;gap:8px;min-width:180px;max-width:220px}
+.hero-edit-card .right .btn{width:100%}
+.hero-edit-card .btn.danger{width:100%}
+/* Estilo rojo para los botones de orden (solo en Hero) */
+#tab-hero .hero-edit-card .right .btn.sm{background:var(--accent);border-color:var(--accent-2);color:#fff}
+#tab-hero .hero-edit-card .right .btn.sm:hover{filter:brightness(1.05)}
+/* Form */
+label{display:flex;flex-direction:column;font-size:13px;gap:6px;color:#0f172a}
+input,textarea,select{background:var(--soft);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px;outline:none;transition:.15s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(193,39,45,.18);background:#fff}
+textarea{min-height:100px;resize:vertical}
+
+/* Buttons */
+.btn{background:#ffffff;color:#0f172a;border:1px solid var(--border);padding:8px 12px;border-radius:10px;cursor:pointer;transition:.2s}
+.btn:hover{border-color:#cbd5e1;transform:translateY(-1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent-2);color:#fff}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.sm{padding:4px 8px;font-size:12px;border-radius:8px}
+.btn.danger{background:var(--danger);border-color:#991B1B;color:#fff}
+
+/* States */
+.status{margin-left:10px}
+.status.ok{color:var(--success)}
+.status.err{color:var(--danger)}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--soft);border:1px solid var(--border);color:var(--accent-2);padding:6px 10px;border-radius:999px;font-size:12px}
+.badge.success{background:#ecfdf5;border:1px solid #bbf7d0;color:#065f46}
+
+.auxilio-status{margin-left:10px;text-transform:capitalize}
+.auxilio-status--pendiente{background:var(--soft);border-color:var(--border);color:var(--muted)}
+.auxilio-status--asignado{background:#FBE2E1;border-color:#F0B3AF;color:var(--accent-2)}
+.auxilio-status--en_camino{background:#FBE2E1;border-color:#F0B3AF;color:var(--accent-2)}
+.auxilio-status--resuelto{background:#ecfdf5;border-color:#bbf7d0;color:#065f46}
+.auxilio-status--cancelado{background:#fef2f2;border-color:#fecaca;color:var(--danger)}
+.dot{width:8px;height:8px;border-radius:999px;background:#94a3b8;display:inline-block}
+.dot.success{background:#16a34a}
+
+/* Lists/Brand list */
+.brand-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.brand-list li{background:#fff;border:1px solid var(--border);padding:10px;border-radius:10px}
+
+/* Brand grid */
+.brand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:12px}
+/* Marcas: fila 1 => logo | acciones, fila 2 => nombre (span 2 col) */
+.brand-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px;display:grid;grid-template-columns:minmax(56px,120px) auto;grid-template-areas: 'logo actions' 'name actions';align-items:center;gap:10px;overflow:hidden}
+.brand-card .logo{grid-area:logo;width:56px;height:56px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f3f4f6;border:1px solid var(--border)}
+.brand-card .logo img{max-width:100%;max-height:100%;object-fit:contain}
+.brand-card .name{grid-area:name;font-weight:600;color:#0f172a;white-space:normal;overflow:hidden;text-overflow:ellipsis;font-size:13px;line-height:1.2;min-width:0;word-break:break-word;margin-top:6px;text-align:center}
+/* Contenedor vertical para acciones al costado del logo */
+.brand-actions-col{grid-area:actions;display:flex;flex-direction:column;gap:6px;min-width:148px;max-width:168px}
+.brand-actions-row{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
+.brand-actions-col .btn.sm{padding:4px 6px;font-size:12px}
+.brand-actions-col .btn.danger{padding:6px 10px;width:100%}
+
+/* Botones subir/bajar en azul solo para Marcas */
+.brand-actions-col .btn.sm[data-role="up"],
+.brand-actions-col .btn.sm[data-role="down"]{background:var(--accent);border-color:var(--accent-2);color:#fff}
+.brand-actions-col .btn.sm[data-role="up"]:hover,
+.brand-actions-col .btn.sm[data-role="down"]:hover{filter:brightness(1.05)}
+
+/* Compat con maquetados anteriores: evitar ancho completo debajo */
+.brand-actions{grid-column:auto}
+.brand-actions .btn.danger{margin-left:0}
+.brand-card .btn.sm{padding:4px 6px;font-size:12px}
+.brand-card .btn.danger{padding:6px 10px}
+
+/* WhatsApp tab: add extra spacing under the first row (Teléfono principal) */
+#tab-whatsapp .row:first-of-type{margin-bottom:16px}
+/* Mostrar acciones más limpias */
+.brand-card .brand-actions{opacity:.9}
+.brand-card:hover .brand-actions{opacity:1}
+.brand-card .row{gap:6px}
+.brand-card .btn.sm{padding:4px 6px;font-size:12px}
+.brand-card .btn.danger{padding:6px 10px}
+
+/* Footer */
+.admin-footer{margin-top:40px;border-top:1px solid var(--border);background:#ffffff;color:var(--muted);font-size:14px}
+
+/* Utility */
+.loading{opacity:.75;pointer-events:none}
+.error{color:#dc2626}
+
+/* Toast (future) */
+.toast{position:fixed;right:16px;bottom:16px;background:#ffffff;border:1px solid var(--border);border-radius:10px;color:#0f172a;padding:10px 14px;box-shadow:0 10px 30px rgba(2,6,23,.15)}
+
+/* Modal (confirmación) */
+.modal{position:fixed;inset:0;background:rgba(2,6,23,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:5000}
+.modal.open{display:flex}
+.modal .modal-dialog{background:#fff;border:1px solid var(--border);border-radius:12px;max-width:720px;width:100%;padding:16px;box-shadow:0 20px 60px rgba(2,6,23,.25);max-height:90vh;display:flex;flex-direction:column}
+/* evitar que el contenido del fondo se desplace cuando el modal está abierto */
+body.modal-open{overflow:hidden}
+.modal .modal-dialog h4{margin:0 0 8px;color:#0f172a}
+.modal .modal-dialog p{margin:0 0 14px;color:#334155}
+.modal .modal-body{flex:1 1 auto;overflow:auto}
+.modal .actions{justify-content:flex-end}
+
+/* Posicionar el modal de "Seleccionar vehículos" un poco más abajo */
+#modalPickVehicles{align-items:flex-start;padding-top:14vh}
+#modalPickVehicles .modal-dialog{margin:0 auto}
+
+/* Ajustes específicos para el modal de edición de producto para que no se salga de pantalla */
+#modalProdEdit .modal-dialog{max-width:90vw;width:100%;max-height:90vh;display:flex;flex-direction:column}
+#modalProdEdit .modal-header{flex:0 0 auto}
+#modalProdEdit .modal-body{flex:1 1 auto;overflow:auto}
+#modalProdEdit .modal-footer{flex:0 0 auto}

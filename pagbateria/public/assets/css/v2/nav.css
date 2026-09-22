@@ -1,0 +1,428 @@
+/* ============================================================================
+ * NAVEGACIÓN — barra superior persistente.
+ *
+ * Sigue las convenciones que el usuario ya tiene aprendidas: logo arriba a la
+ * izquierda, navegación a la derecha, acción de contacto al final. Innovar en
+ * la navegación obliga al usuario a aprender, y un conductor varado no está
+ * para aprender nada.
+ *
+ * Debe responder siempre a: ¿qué sitio es esto?, ¿en qué página estoy?,
+ * ¿qué secciones hay?, ¿cómo salgo de aquí llamando?
+ * ========================================================================= */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: rgb(6 13 24 / 0.86);
+  backdrop-filter: blur(14px) saturate(1.4);
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+}
+
+/* Sobre páginas de fondo claro la barra invierte para no flotar como una
+   mancha oscura sin relación con la página. */
+.nav--light {
+  background: rgb(255 255 255 / 0.9);
+  border-bottom-color: var(--line);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  /* Envuelve para que el buscador caiga a su propia fila en móvil. */
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  /* En móvil la barra son dos filas (marca + buscador) y además es sticky:
+     cada píxel de más se lo come a la pantalla del que está varado. La fila
+     de arriba se aprieta a 60px; en escritorio, donde todo entra en una sola
+     fila, recupera los 68px. */
+  min-height: 60px;
+}
+
+/* --- Logo ------------------------------------------------------------------ */
+
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  /* El logo también es un enlace (vuelve al inicio): necesita el objetivo
+     táctil completo, no solo el alto de su contenido. */
+  min-height: var(--touch-min);
+  text-decoration: none;
+  color: var(--paper);
+  font-weight: 800;
+  letter-spacing: var(--tracking-snug);
+  margin-right: auto;   /* empuja el resto de la barra a la derecha */
+}
+
+.nav--light .nav__brand { color: var(--brand-900); }
+
+.nav__logo {
+  display: block;
+  box-sizing: border-box;
+  height: 34px;
+  width: auto;
+  padding: 6px 9px;
+  border-radius: var(--radius-sm);
+  background: var(--energy-400);
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.nav__brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.nav__brand-name { font-size: var(--text-base); }
+.nav__brand-tag {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--energy-300);
+}
+.nav--light .nav__brand-tag { color: var(--energy-600); }
+
+/* --- Enlaces ---------------------------------------------------------------- */
+
+.nav__links {
+  display: none;   /* en móvil vive dentro del panel desplegable */
+  list-style: none;
+  margin: 0; padding: 0;
+  gap: var(--space-1);
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min);
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--brand-200);
+  transition: color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard);
+}
+
+.nav__link:hover { color: var(--paper); background: rgb(255 255 255 / 0.07); }
+.nav--light .nav__link { color: var(--ink-600); }
+.nav--light .nav__link:hover { color: var(--brand-900); background: var(--paper-2); }
+
+/* La página actual se marca: sin esto el usuario no sabe dónde está, que es
+   una de las cuatro preguntas que toda navegación debe responder. */
+.nav__link[aria-current="page"] {
+  color: var(--paper);
+  background: rgb(255 255 255 / 0.1);
+}
+.nav--light .nav__link[aria-current="page"] {
+  color: var(--brand-900);
+  background: var(--paper-3);
+}
+
+/* --- Buscador global --------------------------------------------------------
+ * Vive en la barra, no dentro del catálogo: quien busca una batería concreta
+ * no debería tener que llegar primero al catálogo para poder escribirlo.
+ * En móvil ocupa su propia fila completa (el .nav__inner envuelve); en
+ * escritorio entra en línea entre los enlaces y el teléfono.
+ * ------------------------------------------------------------------------- */
+.nav__search {
+  order: 10;
+  flex: 1 0 100%;
+  /* Ancla del panel de resultados. */
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 38px;
+  margin-bottom: var(--space-2);
+  padding-inline: var(--space-3);
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 0.06);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+              background-color var(--duration-fast) var(--ease-standard);
+}
+
+.nav__search:focus-within {
+  border-color: var(--energy-300);
+  background: rgb(255 255 255 / 0.1);
+}
+
+.nav__search-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: var(--brand-500);
+}
+.nav__search-icon svg { width: 18px; height: 18px; }
+
+.nav__search-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--paper);
+  font: inherit;
+  font-size: var(--text-sm);
+  /* El anillo de foco lo pinta el contenedor con :focus-within: dos anillos
+     concéntricos (input + píldora) se leen como un error de maquetado. */
+  outline: none;
+}
+.nav__search-input::placeholder { color: var(--brand-500); }
+
+/* La X nativa de Chrome en type="search" es diminuta y no se puede estilar:
+   se oculta y se usa un botón propio, que además cumple el objetivo táctil. */
+.nav__search-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+
+.nav__search-clear {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 0.12);
+  color: var(--paper);
+  font-size: var(--text-lg);
+  line-height: 1;
+  cursor: pointer;
+}
+.nav__search-clear:hover { background: rgb(255 255 255 / 0.22); }
+.nav__search-clear[hidden] { display: none; }
+
+/* --- Panel de resultados del buscador ---------------------------------------
+ * Fondo claro sobre la barra oscura: es una superficie nueva, no una extensión
+ * del encabezado, y el producto (foto y precio) se lee mejor sobre claro.
+ * ------------------------------------------------------------------------- */
+.nav__search-panel {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  inset-inline: 0;
+  z-index: 1;
+  /* Las 6 filas completas entran sin barra de desplazamiento; el tope por vh
+     es para móvil, donde el teclado se come media pantalla. */
+  max-height: min(27rem, 60vh);
+  overflow-y: auto;
+  /* Que el scroll del panel no arrastre la página detrás al llegar al final. */
+  overscroll-behavior: contain;
+  padding: var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+  box-shadow: var(--shadow-xl);
+}
+
+.nav__search-panel[hidden] { display: none; }
+
+.nav__search-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--ink-900);
+}
+
+/* Un solo estado visual para el ratón y para el teclado: si la fila resaltada
+   con las flechas se viera distinta de la que está bajo el cursor, serían dos
+   lenguajes para la misma idea. */
+.nav__search-item:hover,
+.nav__search-item--activo {
+  background: var(--paper-3);
+}
+
+.nav__search-foto {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  object-fit: contain;
+}
+
+.nav__search-foto--vacia { display: block; }
+
+.nav__search-item-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.nav__search-item-nombre {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  /* Los nombres de modelo son largos ("ETNA MT-11 PRO EXT NOR"): se recortan
+     antes que empujar el precio fuera del panel. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav__search-item-marca {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ink-500);
+}
+
+.nav__search-item-precio {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  color: var(--brand-900);
+}
+
+.nav__search-vacio {
+  margin: 0;
+  padding: var(--space-4);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--ink-500);
+}
+
+/* --- Acciones --------------------------------------------------------------- */
+
+.nav__actions { display: flex; align-items: center; gap: var(--space-2); }
+
+/* El teléfono en la barra es la salida de emergencia: siempre visible, nunca
+   dentro de un menú que haya que abrir. */
+.nav__phone {
+  display: none;
+  align-items: center;
+  /* Es la salida de emergencia: nunca debe partirse en dos líneas ni encogerse
+     para hacerle sitio al buscador. */
+  flex-shrink: 0;
+  white-space: nowrap;
+  gap: var(--space-2);
+  min-height: var(--touch-min);
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-full);
+  border: 1px solid rgb(255 255 255 / 0.22);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--paper);
+}
+.nav__phone:hover { border-color: var(--energy-300); color: var(--energy-300); }
+.nav--light .nav__phone { border-color: var(--line-strong); color: var(--brand-900); }
+
+/* --- Botón hamburguesa ------------------------------------------------------ */
+
+.nav__toggle {
+  display: inline-grid;
+  place-items: center;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+}
+.nav--light .nav__toggle { border-color: var(--line-strong); color: var(--brand-900); }
+
+.nav__toggle-bars { display: grid; gap: 4px; width: 18px; }
+.nav__toggle-bars span {
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform var(--duration-base) var(--ease-standard), opacity var(--duration-fast) var(--ease-standard);
+}
+
+/* La hamburguesa se convierte en X: el usuario ve que el mismo botón cierra
+   lo que abrió, sin tener que buscar otro control. */
+.nav__toggle[aria-expanded="true"] .nav__toggle-bars span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bars span:nth-child(2) { opacity: 0; }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bars span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* --- Panel móvil ------------------------------------------------------------ */
+
+.nav__panel {
+  display: grid;
+  gap: var(--space-1);
+  padding-bottom: var(--space-4);
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+  margin-top: var(--space-2);
+}
+.nav--light .nav__panel { border-top-color: var(--line); }
+
+.nav__panel[hidden] { display: none; }
+
+.nav__panel .nav__link {
+  width: 100%;
+  min-height: 48px;
+  font-size: var(--text-base);
+}
+
+.nav__panel-cta { margin-top: var(--space-3); display: grid; gap: var(--space-2); }
+
+/* El punto de corte real no es "tableta vs escritorio" (900px), es "¿entra
+   la fila completa sin desbordar?" — logo+marca, 6 enlaces, buscador y
+   teléfono miden ~1125px de contenido. Medido en el navegador: a 900–1024px
+   la fila desbordaba hasta 76px (el teléfono quedaba cortado fuera de
+   pantalla, y la marca y "Inicio" terminaban pegados sin aire entre sí).
+   Eso es exactamente lo que se ve en un celular puesto en "vista de
+   escritorio" (Chrome/Safari suelen reportar 980–1024px) — no es un caso
+   raro, es el caso típico. 1200px es el primer ancho donde la fila entra
+   sin recortar nada, con margen. Por debajo de eso, el menú hamburguesa
+   (que ya existía y ya funciona bien) sigue siendo la mejor opción. */
+@media (min-width: 1200px) {
+  .nav__links  { display: flex; }
+  .nav__phone  { display: inline-flex; }
+  .nav__toggle { display: none; }
+  .nav__panel  { display: none !important; }
+  /* En escritorio todo entra en una fila: `nowrap` impide que un enlace un
+     poco más ancho (la página activa cambia de página a página) empuje el
+     teléfono a una segunda línea. Los bloques ceden ancho encogiéndose. */
+  .nav__inner { flex-wrap: nowrap; gap: var(--space-4); min-height: 68px; }
+  .nav__links { gap: 0; flex-shrink: 1; }
+  .nav__link  { padding-inline: var(--space-2); }
+  .nav__search {
+    order: 0;
+    flex: 1 1 9rem;
+    max-width: 16rem;
+    margin-bottom: 0;
+  }
+  /* El campo cede ancho para que la barra entre en una fila, pero el panel no
+     tiene por qué heredar esa estrechez: se ancla al borde derecho del campo y
+     crece hacia la izquierda, donde hay sitio de sobra. */
+  .nav__search-panel {
+    inset-inline: auto 0;
+    width: 24rem;
+  }
+}
+
+@media (min-width: 1320px) {
+  .nav__inner { gap: var(--space-5); }
+  .nav__link  { padding-inline: var(--space-3); }
+}
+
+/* --- Franja de aviso superior -----------------------------------------------
+ * Comunica disponibilidad y cobertura antes de que el usuario pregunte. Es
+ * lo que más rellena el "depósito de buena voluntad" en el primer segundo.
+ * ------------------------------------------------------------------------- */
+
+.topbar {
+  background: var(--brand-800);
+  color: var(--brand-100);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 34px;
+  text-align: center;
+}
+
+.topbar strong { color: var(--energy-300); }
+
+@media (max-width: 560px) {
+  .topbar__inner { font-size: 0.6875rem; }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es-PE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sin conexión | CambiaTuBatería Perú</title>
+<meta name="theme-color" content="#0F0F10">
+<link rel="stylesheet" href="assets/css/v2/tokens.css">
+<link rel="stylesheet" href="assets/css/v2/base.css">
+<link rel="stylesheet" href="assets/css/v2/components.css">
+<style>
+  /* La página offline no depende del layout general: se define aquí para que
+     funcione aunque solo se haya cacheado esta hoja. El objetivo único es que
+     el teléfono siga marcable sin datos. */
+  .offline {
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    padding: var(--space-6);
+    background: var(--brand-950);
+    color: var(--paper);
+    text-align: center;
+  }
+  .offline__inner { max-width: 26rem; display: grid; gap: var(--space-5); }
+  .offline__icon { font-size: 3rem; }
+  .offline__title { font-size: var(--text-2xl); }
+  .offline__text { color: var(--brand-200); }
+  .offline__phone {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--energy-400);
+    letter-spacing: var(--tracking-tight);
+  }
+</style>
+</head>
+<body>
+  <main class="offline">
+    <div class="offline__inner">
+      <div class="offline__icon" aria-hidden="true">🔌</div>
+      <h1 class="offline__title">Estás sin conexión</h1>
+      <p class="offline__text">
+        No pudimos cargar la página, pero seguimos atendiendo. Llámanos ahora
+        mismo.
+      </p>
+      <a data-whatsapp-role="tel" href="tel:+51936956877" class="btn btn--urgent btn--lg btn--block" data-urgency="true">
+        Llamar 936 956 877
+      </a>
+      <p class="offline__phone">936 956 877</p>
+    </div>
+  </main>
+</body>
+</html>

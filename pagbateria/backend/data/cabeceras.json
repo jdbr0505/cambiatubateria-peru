@@ -1,0 +1,30 @@
+{
+  "catalogo": {
+    "titulo": "Baterías con instalación incluida",
+    "bajada": "Todos los precios incluyen traslado e instalación. Entrega el casco usado y descuenta S/ 40."
+  },
+  "servicios": {
+    "titulo": "Todo lo que hacemos, donde estés",
+    "bajada": "No solo vendemos baterías: llegamos, diagnosticamos e instalamos."
+  },
+  "cobertura": {
+    "titulo": "Lima Metropolitana y Callao",
+    "bajada": "Estos son los distritos donde llegamos con tu batería nueva."
+  },
+  "contacto": {
+    "titulo": "Hablemos",
+    "bajada": "Atendemos por teléfono y WhatsApp."
+  },
+  "servicios-trabajo": {
+    "titulo": "El mismo técnico diagnostica, instala y se lleva la usada",
+    "bajada": "Nada se coordina por partes: quien llega a tu ubicación es quien resuelve todo, con la herramienta y el stock para no tener que volver una segunda vez."
+  },
+  "inicio-franja": {
+    "titulo": "Baterías 100% originales, instaladas donde estés y con garantía real.",
+    "bajada": null
+  },
+  "inicio-catalogo": {
+    "titulo": "Baterías para cada vehículo",
+    "bajada": "Marcas Etna, Bosch, Varta y más. Todos los precios incluyen traslado e instalación a domicilio. Entrega tu batería usada y descuenta S/ 40."
+  }
+}

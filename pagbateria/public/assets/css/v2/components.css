@@ -1,0 +1,854 @@
+/* ============================================================================
+ * COMPONENTES — botones, hero, tarjetas, sheets, toasts, skeletons.
+ * Requiere tokens.css cargado antes. Sin @import: cada hoja se enlaza por
+ * separado desde el HTML para no serializar las descargas.
+ * ========================================================================= */
+
+/* --- Botón -----------------------------------------------------------------
+ * La animación de pulsación la controla button.js con motion (spring). El CSS
+ * solo aporta la transición de color, que no compite con el resorte.
+ * ------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--touch-min);
+  padding-inline: var(--space-6);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-base);
+  letter-spacing: var(--tracking-snug);
+  text-decoration: none;
+  cursor: pointer;
+  /* Sin esto, un toque rápido en móvil selecciona el texto del botón en
+     vez de activarlo. */
+  user-select: none;
+  touch-action: manipulation;
+  will-change: transform;
+  transition: background-color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+
+/* El anillo de pulso se movió de este botón al de WhatsApp del hero (pedido
+   del jefe: WhatsApp es 100% el canal, el de auxilio ya no debe verse como
+   la acción "urgente" de la pantalla). Sigue siendo el único botón sólido en
+   el rojo de urgencia (ver tokens.css), solo que ahora sin animación propia. */
+.btn--urgent {
+  background: var(--urgent-600);
+  color: var(--paper);
+  box-shadow: var(--shadow-urgent);
+}
+.btn--urgent:hover { background: var(--urgent-700); }
+
+.btn--primary {
+  background: var(--brand-800);
+  color: var(--paper);
+  box-shadow: var(--shadow-md);
+}
+.btn--primary:hover { background: var(--brand-900); }
+
+/* Fondo sólido con texto blanco, no oscuro: a diferencia del ámbar que
+   reemplaza, el rojo a esta saturación no tiene luminosidad para texto
+   oscuro legible encima — ver la nota de la escala en tokens.css. */
+.btn--energy {
+  background: var(--energy-400);
+  color: var(--paper);
+  box-shadow: var(--shadow-energy);
+}
+/* Oscurece al pasar el mouse, no aclara: con texto blanco, aclarar el fondo
+   le resta contraste al texto en vez de sumárselo. */
+.btn--energy:hover { background: var(--energy-500); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--brand-800);
+  border-color: var(--line-strong);
+}
+.btn--ghost:hover { border-color: var(--brand-800); background: var(--paper-2); }
+
+/* Sobre fondo oscuro el fantasma invierte, o desaparece. El banner de cookies
+   es oscuro (--brand-900) pero vive fuera de .hero/.section--dark: sin esta
+   regla "Rechazar" quedaba con el color por defecto (--brand-800, oscuro)
+   sobre ese mismo fondo oscuro — invisible. */
+.section--dark .btn--ghost,
+.hero .btn--ghost,
+.cookie-banner .btn--ghost {
+  color: var(--paper);
+  border-color: rgb(255 255 255 / 0.3);
+}
+.section--dark .btn--ghost:hover,
+.hero .btn--ghost:hover,
+.cookie-banner .btn--ghost:hover {
+  background: rgb(255 255 255 / 0.08);
+  border-color: var(--paper);
+}
+
+/* La acción principal es más alta y más ancha que el resto: la jerarquía se
+   ve antes de leer una sola palabra. */
+.btn--lg {
+  min-height: var(--touch-primary);
+  padding-inline: var(--space-8);
+  font-size: var(--text-lg);
+}
+
+.btn--block { width: 100%; }
+
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* Feedback de espera del boton de auxilio mientras se obtiene el GPS. Los tres
+   puntos los anima motion (spring), no @keyframes: así el .btn__spinner nace y
+   muere con el mismo motor de física que el resto del sitio, en vez de tener
+   una animación paralela con su propia curva. */
+.btn__spinner {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: var(--space-2);
+}
+
+.btn__spinner-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.9;
+}
+
+/* --- Hero ------------------------------------------------------------------
+ * Lienzo oscuro: aquí vive la sofisticación. El único elemento rojo de la
+ * pantalla es el CTA de auxilio, y sobre este fondo profundo salta solo.
+ * ------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  background: var(--brand-950);
+  color: var(--paper);
+  overflow: hidden;
+}
+
+/* Cabecera de las páginas internas: mismo lienzo oscuro, pero centrada y con
+   menos aire. No es un hero de conversión, es un rótulo de página. */
+.hero--page {
+  padding-block: var(--space-12) var(--space-10);
+  text-align: center;
+}
+.hero--page .hero__inner { max-width: 46ch; margin-inline: auto; align-items: center; }
+.hero--page .hero__title { font-size: var(--text-3xl); }
+.hero--page .hero__lead  { max-width: 52ch; }
+
+/* Cuchilla roja en las cabeceras internas: el mismo motivo del hero de
+   portada y de la franja, para que el rótulo oscuro de cada página lleve el
+   sello de marca y no sea un rectángulo plano. Se dibuja con dos
+   pseudo-elementos (hoja roja + filo blanco), detrás del texto — el HTML
+   solo suma la clase. */
+.hero--blade::before,
+.hero--blade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero--blade::before {
+  clip-path: polygon(95% 0, 100% 0, 100% 100%, 88% 100%);
+  background: linear-gradient(165deg, var(--energy-300) 0%, var(--energy-400) 45%, var(--energy-600) 100%);
+}
+
+.hero--blade::after {
+  clip-path: polygon(99% 0, 100% 0, 100% 100%, 97.5% 100%);
+  background: rgb(255 255 255 / 0.3);
+}
+
+/* El contenido queda por encima de la cuchilla. */
+.hero--blade .hero__inner { position: relative; z-index: 1; }
+
+/* --- Hero de portada: la foto a toda anchura -------------------------------
+ * Segunda vuelta de este hero: la primera lo partía en dos columnas (texto |
+ * foto enmarcada), y tras compararlo con la competencia se vio chico. Ahora
+ * la foto ocupa TODO el ancho y alto del bloque — "amplia", como se pidió —
+ * y el texto flota encima sobre un degradado direccional: oscuro justo donde
+ * hace falta para leer, nítido hacia el resto de la foto. No es el velo plano
+ * de hace dos versiones (que tapaba el 80% de la imagen): el degradado
+ * dosifica la oscuridad solo donde vive el texto.
+ * ------------------------------------------------------------------------- */
+.hero--full { padding: 0; }
+
+.hero__media {
+  position: relative;
+  min-height: clamp(28rem, 92vw, 38rem);
+  isolation: isolate;
+}
+
+@media (min-width: 768px) {
+  .hero__media { min-height: clamp(30rem, 58vw, 40rem); }
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 62% horizontal: el técnico y la batería están a la derecha del centro
+     de la foto — "center" recortaba de más hacia la izquierda (capó vacío)
+     en pantallas anchas y lo dejaba casi fuera de cuadro. */
+  object-position: 62% 22%;
+  /* Sin animación de zoom ni filter() en vivo sobre esta imagen: las dos
+     mostraron el mismo bug real en pruebas — el primer pintado se quedaba
+     en negro hasta que algo forzaba un repintado, justo cuando el alto de
+     .hero__media lo define el contenido (título de varias líneas) y no un
+     alto fijo. El grado de color va horneado en el archivo; el zoom se
+     sacrifica del todo — no vale el riesgo de que la foto no aparezca. */
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  /* Un solo degradado horizontal: oscuro donde vive el texto (izquierda),
+     transparente del todo pasado el 60% para que la foto se vea nítida sin
+     velo — dos degradados apilados aquí sumaban su opacidad y terminaban
+     tapando la foto entera, no solo detrás del texto. */
+  background: linear-gradient(90deg,
+    rgb(15 15 16 / 0.9) 0%,
+    rgb(15 15 16 / 0.72) 30%,
+    rgb(15 15 16 / 0.3) 52%,
+    transparent 66%);
+}
+
+/* Usa .container .container--flush-left (ver layout.css) en vez de .container
+   a secas: mismo max-width, pero anclado a la izquierda en vez de centrado,
+   para que el titular quede a la misma distancia del borde que el logo del
+   navbar en cualquier ancho de pantalla. */
+.hero__media-inner {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding-block: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .hero__media-inner { align-items: center; padding-block: var(--space-12); }
+}
+
+/* --- Elemento gráfico de marca ----------------------------------------------
+ * Un rayo casi transparente flotando suelto se veía fuera de lugar; la
+ * versión "a escuadra" (barra recta) se veía plana y menos elegante que la
+ * cuchilla diagonal original. Vuelve la diagonal — a escuadra con la CAJA
+ * del hero, no con la foto: `inset: 0` hace que las tres capas midan el
+ * bloque completo de arriba abajo, sin que nada quede corrido ni flotando.
+ * ------------------------------------------------------------------------- */
+.hero__accent {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  clip-path: polygon(97% 0, 100% 0, 100% 100%, 91% 100%);
+  background: linear-gradient(165deg, var(--energy-300) 0%, var(--energy-400) 45%, var(--energy-600) 100%);
+}
+
+.hero__accent::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(95.6% 0, 97% 0, 91% 100%, 89.6% 100%);
+  background: var(--brand-950);
+}
+
+.hero__accent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(99.3% 0, 100% 0, 100% 100%, 98.3% 100%);
+  background: rgb(255 255 255 / 0.35);
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-5);
+  max-width: 34rem;
+}
+
+@media (min-width: 768px) {
+  /* min(44rem, 50%): en escritorio angosto (~1024-1280px) el titular en
+     mayúsculas ocupaba más de la mitad del ancho y se metía justo donde
+     cae la cara del técnico en la foto. Con el tope al 50% el texto se
+     parte en más líneas en vez de estirarse sobre la cara — el tamaño de
+     letra no cambia, solo dónde termina la columna. */
+  .hero__content { max-width: min(44rem, 50%); }
+}
+
+/* --- Entrada del hero --------------------------------------------------
+ * Se ve una sola vez por visita: se permite más tiempo y una curva con más
+ * carácter, en CSS puro (springs.js queda para lo interactivo). Un solo
+ * protagonista por escena: la foto asienta con zoom-out, el título se revela
+ * con un barrido, y el resto entra con un fundido+ascenso simple en cascada. */
+.hero__content > * {
+  opacity: 0;
+  animation: hero-enter var(--duration-slow) var(--ease-out-strong) forwards;
+}
+.badge--live { animation-delay: 0ms; }
+.hero__lead  { animation-delay: 350ms; }
+
+@keyframes hero-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero__title {
+  /* Imponente a propósito: mayúsculas + tracking cerrado, la misma fórmula
+     de titular grande que un cartel de taller — no un H1 de blog. clamp()
+     en vez de saltos por breakpoint para que crezca fluido con el ancho. */
+  /* Mínimo más bajo en móvil: 2.5rem (40px) en una pantalla de 375px hacía
+     que el titular de tres líneas empujara el alto del hero a ~620px y se
+     leyera tan grande como en escritorio. Arranca en 2rem y sube fluido
+     hasta el mismo 4.5rem de antes en pantallas anchas — el tope no cambia. */
+  font-size: clamp(2rem, 1.15rem + 3.7vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  /* Sombra sutil: separa el titular blanco de la foto sin más overlay. */
+  text-shadow: 0 2px 24px rgb(0 0 0 / 0.5);
+  /* Barrido de izquierda a derecha: es el primer texto que se lee, se gana su
+     propia entrada. Declarado tras ".hero__content > *" para ganar la cascada. */
+  opacity: 1;
+  clip-path: inset(0 100% 0 0);
+  animation: hero-title-reveal 650ms var(--ease-out-strong) forwards;
+  animation-delay: 150ms;
+}
+
+@keyframes hero-title-reveal {
+  to { clip-path: inset(0 0 0 0); }
+}
+
+/* La palabra clave del titular remata la entrada con un pequeño énfasis
+   propio justo cuando el barrido termina de revelarla — sin volver a
+   ocultarla (nada de opacity:0 aquí), solo un asentamiento de escala. */
+.hero__title em {
+  display: inline-block;
+  transform-origin: left center;
+  animation: hero-em-emphasis 400ms var(--ease-out-strong) both;
+  animation-delay: 650ms;
+}
+
+@keyframes hero-em-emphasis {
+  from { transform: scale(0.85); }
+  to   { transform: scale(1); }
+}
+
+/* El jefe pidió el titular en un solo color: el rojo en "Tú, tranquilo."
+   quedaba como un segundo color dentro del mismo titular. Se quita el color
+   propio y el em hereda el blanco del resto (.hero { color: var(--paper) }),
+   así el titular se lee de una sola vez, sin partirse en dos tonos. El
+   énfasis en rojo de marca sigue presente al lado — badge, botón de
+   WhatsApp, cuchilla — no desaparece del hero, solo deja de mezclarse con
+   el texto. */
+.hero__title em {
+  font-style: normal;
+}
+
+.hero__lead {
+  font-size: var(--text-lg);
+  color: var(--brand-200);
+  letter-spacing: var(--tracking-snug);
+  max-width: 46ch;
+}
+
+/* --- Accesos rápidos a servicios (dentro de la foto, bajo el titular) -------
+ * Fila compacta: icono + una palabra, sin descripción ni tarjeta — el mismo
+ * tratamiento minimalista que la referencia del dueño, para que el titular
+ * y la foto sigan siendo el protagonista y esto no sature la escena.
+ * ------------------------------------------------------------------------- */
+.service-icons {
+  /* Sin esto, el <ul> se encoge a su contenido dentro de la columna
+     flex-start del padre — el ancho disponible real cae por debajo de lo
+     que necesitan las 5 palabras en una fila y algunas terminan envueltas
+     en una segunda línea, amontonadas, en vez de repartirse en una sola. */
+  align-self: stretch;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  /* Móvil: filas apretadas para que las 5 palabras quepan en dos líneas
+     ordenadas y no ocupen medio hero. En tablet+ recupera el aire. */
+  gap: var(--space-4) var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .service-icons { gap: var(--space-6) var(--space-8); }
+}
+
+/* Entrada uno por uno, desde abajo — pedido del jefe, "así como el de El
+   Mundo de las Baterías". Antes toda la fila entraba junta como un solo
+   bloque (era .service-icons la que animaba); ahora cada ítem tiene su
+   propia animación y un delay creciente, así se ven aparecer en cascada. */
+.service-icons__item {
+  opacity: 0;
+  animation: service-icon-enter var(--duration-slow) var(--ease-out-strong) forwards;
+}
+.service-icons__item:nth-child(1) { animation-delay: 250ms; }
+.service-icons__item:nth-child(2) { animation-delay: 330ms; }
+.service-icons__item:nth-child(3) { animation-delay: 410ms; }
+.service-icons__item:nth-child(4) { animation-delay: 490ms; }
+.service-icons__item:nth-child(5) { animation-delay: 570ms; }
+
+@keyframes service-icon-enter {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.service-icons__item a {
+  display: flex;
+  flex-direction: column;
+  /* Antes flex-start: el ícono quedaba centrado sobre su círculo pero la
+     palabra de abajo (Auxilio, Instalación...) colgaba pegada a la
+     izquierda, descuadrada respecto al círculo. Centrado, texto y ícono
+     comparten el mismo eje. */
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: inherit;
+  min-height: var(--touch-min);
+}
+
+.service-icons__badge {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  /* 3rem (48px) en móvil: el círculo de 3.75rem se veía enorme junto a una
+     sola palabra. Sube a 3.75rem en tablet+ donde sí hay espacio. */
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.1);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgb(255 255 255 / 0.28);
+  color: var(--energy-300);
+  transition: transform var(--duration-base) var(--ease-out-strong),
+              background-color var(--duration-base) var(--ease-standard),
+              border-color var(--duration-base) var(--ease-standard);
+}
+
+.service-icons__badge svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+@media (min-width: 768px) {
+  .service-icons__badge { width: 3.75rem; height: 3.75rem; }
+  .service-icons__badge svg { width: 1.75rem; height: 1.75rem; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-icons__item a:hover .service-icons__badge {
+    background: var(--energy-400);
+    border-color: var(--energy-400);
+    color: var(--paper);
+    transform: translateY(-2px);
+  }
+}
+
+.service-icons__label {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--paper);
+}
+
+/* --- CTA de WhatsApp en el hero ----------------------------------------------
+ * Acción principal del hero, junto al titular: WhatsApp es el canal que más
+ * convierte, así que va primero y sin necesidad de scroll. Hereda la entrada
+ * en cascada de `.hero__content > *`; solo se le da un delay propio (entra
+ * después de la bajada, antes de la fila de servicios) para que no aparezca
+ * de golpe a la vez que el badge.
+ * ------------------------------------------------------------------------- */
+.hero__whatsapp-cta { animation-delay: 450ms; }
+
+/* Anillo de pulso: el mismo mecanismo que .floating-cta__btn--whatsapp::after
+   y que antes tenía el botón de auxilio (.btn--urgent), reutilizado aquí en
+   el rojo propio del botón (--energy-400, no el verde de WhatsApp) — cada
+   botón pulsa en su propio color, no en uno fijo. WhatsApp es ahora el único
+   canal con esa señal de "tócame" en el hero. */
+.hero__whatsapp-cta {
+  position: relative;
+}
+
+.hero__whatsapp-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--energy-400);
+  animation: floating-cta-pulse 2.4s var(--ease-standard) infinite;
+  pointer-events: none;
+}
+
+/* En móvil el CTA se estiraba casi de borde a borde (~312px de 343): el
+   padding grande de .btn--lg (32px) + fuente de 18px lo hacían "muy largo".
+   Se aprieta a fuente base y padding menor; en tablet+ recupera el tamaño
+   grande de acción principal. */
+.hero__whatsapp-cta {
+  font-size: var(--text-base);
+  padding-inline: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .hero__whatsapp-cta {
+    font-size: var(--text-lg);
+    padding-inline: var(--space-8);
+  }
+}
+
+/* --- CTA de geolocalización -------------------------------------------------
+ * Ya no vive en el hero, y ahora tampoco es la primera acción de su propia
+ * sección: WhatsApp la antecede. Sigue siendo la única acción roja/urgente
+ * del sitio — el camino para quien no puede escribir.
+ * ------------------------------------------------------------------------- */
+.gps-cta {
+  gap: var(--space-4);
+  min-height: 4.5rem;
+  padding-inline: var(--space-6);
+  text-align: left;
+}
+
+.gps-cta svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+}
+
+.gps-cta__text { display: flex; flex-direction: column; line-height: 1.25; text-align: left; }
+.gps-cta__text strong { font-size: var(--text-base); font-weight: 800; }
+.gps-cta__text small {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  opacity: 0.85;
+  letter-spacing: 0;
+}
+
+/* Separa los dos caminos de la sección de contacto final (WhatsApp primero,
+   GPS como alternativa) sin que se lean como dos CTAs de igual peso. */
+.cta-final__alterna {
+  margin: var(--space-6) 0 var(--space-4);
+  color: var(--ink-500);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+/* --- Foto editorial dentro de .grid--halves ---------------------------------
+ * Mismo lenguaje visual que .card (radio, sombra en dos capas): la foto se
+ * lee como parte del sistema, no como un elemento pegado encima.
+ * ------------------------------------------------------------------------- */
+
+.media-frame {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  object-fit: cover;
+}
+
+/* Placa roja asomando detrás de la foto: mismo recurso de marca (el
+   bloque de color diagonal) que el hero/franja/cabeceras, en miniatura,
+   para que estas fotos editoriales no se sientan una imagen suelta con
+   sombra — la foto queda "montada" sobre algo, no flotando en blanco. */
+.media-frame-wrap {
+  position: relative;
+  isolation: isolate;
+}
+
+.media-frame-wrap::before {
+  content: "";
+  position: absolute;
+  top: -0.85rem;
+  right: -0.85rem;
+  width: 6rem;
+  height: 6rem;
+  background: linear-gradient(165deg, var(--energy-300) 0%, var(--energy-400) 45%, var(--energy-600) 100%);
+  border-radius: var(--radius-lg);
+  z-index: -1;
+}
+
+/* --- Franja de marcas dentro del hero ---------------------------------------
+ * Como sección aparte caía justo en el pliegue, sobre fondo claro, y el dueño
+ * reportó que no la veía. Acá remata el hero: mismo fondo oscuro, los logos de
+ * marca contrastan, y se ve sin hacer scroll.
+ * ------------------------------------------------------------------------- */
+.hero__logos {
+  margin-top: var(--space-12);
+  /* Asimétrico a propósito: los logos ya crecieron (88px de placa); el
+     colchón extra abajo es lo que evita que se sientan pegados a la
+     cabecera clara de "3 simples pasos" que viene justo después. */
+  padding-block: var(--space-8) var(--space-16);
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.hero__logos-label {
+  margin: 0 0 var(--space-5);
+  text-align: center;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  /* --brand-500 (#6B6B74) sobre el fondo casi negro del hero no llega a
+     4.5:1 (auditoría axe-core) — --brand-200 es el mismo tono de gris
+     secundario ya usado en otras secciones oscuras del sitio
+     (.section--dark .section-head__lead), aquí también pasa AA. */
+  color: var(--brand-200);
+}
+
+/* --- Tarjeta ---------------------------------------------------------------- */
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  /* Sombra leve de base, no solo al pasar el mouse: sin ella la tarjeta
+     leía como un rectángulo con borde, no como una superficie elevada. */
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard), transform var(--duration-base) var(--ease-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-lg);
+    /* 2px es suficiente para que se sienta vivo. Más se vuelve saltarín. */
+    transform: translateY(-2px);
+  }
+}
+
+.card__icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem; height: 2.75rem;
+  border-radius: var(--radius-md);
+  background: var(--energy-100);
+  /* brand-900 sobre el tinte rojo claro, no energy-600: un rojo oscuro ahí
+     no alcanzaba el contraste exigido. Los emoji ignoran el color, pero los
+     iconos de texto (números de paso, símbolos) sí lo usan. */
+  color: var(--brand-900);
+  font-size: var(--text-xl);
+}
+
+.card__icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.card__title { font-size: var(--text-lg); font-weight: 700; }
+.card__text { color: var(--ink-600); font-size: var(--text-sm); white-space: pre-line; }
+
+/* --- Distintivo -------------------------------------------------------------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.badge--energy  { background: var(--energy-100); color: var(--energy-600); }
+.badge--success { background: var(--success-100); color: var(--success-600); }
+
+/* Interpela directo al momento en que el visitante lee esto (auto varado,
+   probando el motor una vez más). El punto sigue latiendo para que se lea
+   como una alerta activa, no un cartel estático. Usa energy-300 (rojo claro
+   de marca), no energy-400 (el rojo del botón de auxilio): distinto tono
+   dentro de la misma familia, para que a simple vista no se confunda con
+   el CTA — aunque ya no dependa de ser el único elemento rojo de la
+   pantalla (ver tokens.css). rgb(240 119 108) = energy-300 en crudo: los
+   literales hardcoded (tinte de fondo, halo del pulso) no pueden tomar la
+   custom property directamente dentro de rgb(), así que se repiten a mano. */
+.badge--live {
+  background: rgb(240 119 108 / 0.15);
+  color: var(--energy-300);
+}
+.badge--live::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--energy-300);
+  box-shadow: 0 0 0 0 rgb(240 119 108 / 0.7);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  70%  { box-shadow: 0 0 0 7px rgb(240 119 108 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(240 119 108 / 0); }
+}
+
+/* --- Bottom sheet ----------------------------------------------------------
+ * El posicionamiento vive aquí; la animación de entrada/salida y el arrastre
+ * los controla sheet.js con motion, para que resorte y gesto compartan el
+ * mismo motor de física.
+ * ------------------------------------------------------------------------- */
+
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: rgb(6 13 24 / 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.sheet {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: var(--z-sheet);
+  background: var(--paper);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  max-height: 85vh;
+  overflow-y: auto;
+  /* Sin esto, hacer scroll hasta el tope/fondo del sheet en móvil traspasa el
+     gesto a la página de fondo (el hero se desplaza detrás del panel) — un
+     "rebote" que rompe la sensación de estar dentro de un panel modal. */
+  overscroll-behavior: contain;
+  box-shadow: var(--shadow-xl);
+  /* Respeta la barra de gestos del iPhone: sin esto el último botón del
+     sheet queda bajo el home indicator y es intocable. */
+  padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+}
+
+.sheet__handle {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-3) 0;
+  cursor: grab;
+  touch-action: none;
+}
+
+.sheet__handle-bar {
+  width: 2.25rem;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--ink-300);
+}
+
+.sheet__body { padding: 0 var(--space-5) var(--space-4); }
+.sheet__title { font-size: var(--text-xl); margin-bottom: var(--space-2); }
+
+.hidden { display: none !important; }
+
+/* --- Campo de formulario ---------------------------------------------------- */
+
+.field { display: grid; gap: var(--space-2); }
+
+.field__label { font-size: var(--text-sm); font-weight: 700; }
+
+.field__input {
+  min-height: var(--touch-min);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  transition: border-color var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.field__input:focus {
+  outline: none;
+  border-color: var(--brand-600);
+  box-shadow: 0 0 0 3px rgb(44 109 168 / 0.15);
+}
+
+.field__error { font-size: var(--text-sm); color: var(--urgent-600); }
+
+/* --- Toast (Sonner) --------------------------------------------------------
+ * Se apilan desde abajo; motion.js anima entrada y salida.
+ * ------------------------------------------------------------------------- */
+
+.toast-stack {
+  position: fixed;
+  inset-inline: 0;
+  bottom: var(--space-4);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: var(--space-2);
+  padding-inline: var(--space-4);
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  max-width: 24rem;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--ink-900);
+  color: var(--paper);
+  font-size: var(--text-sm);
+  box-shadow: var(--shadow-xl);
+}
+
+.toast--success { background: var(--success-600); }
+.toast--warning { background: var(--warning-500); }
+.toast--urgent  { background: var(--urgent-600); }
+
+/* --- Skeleton (estado de carga) ---------------------------------------------
+ * Un esqueleto con la forma del contenido real hace la espera más corta de
+ * lo que es; un spinner genérico la hace más larga.
+ * ------------------------------------------------------------------------- */
+
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--paper-3) 25%, var(--line) 37%, var(--paper-3) 63%);
+  background-size: 400% 100%;
+  border-radius: var(--radius-sm);
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+.skeleton--text { height: 1em; margin-block: 0.3em; }
+.skeleton--title { height: 1.6em; width: 60%; }
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* --- Banner de consentimiento de cookies (inyectado por JS) ------------- */
+.cookie-banner {
+  position: fixed;
+  inset-inline: var(--space-4);
+  bottom: var(--space-4);
+  z-index: var(--z-toast);
+  max-width: 42rem;
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  background: var(--brand-900);
+  color: var(--brand-100);
+  border: 1px solid var(--brand-700);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  font-size: var(--text-sm);
+}
+.cookie-banner__texto { margin: 0; flex: 1 1 16rem; line-height: var(--leading-snug); }
+.cookie-banner__texto a { color: var(--energy-300); }
+.cookie-banner__acciones { display: flex; gap: var(--space-2); flex-shrink: 0; }
+.cookie-banner .btn { min-height: 40px; padding-inline: var(--space-4); font-size: var(--text-sm); }

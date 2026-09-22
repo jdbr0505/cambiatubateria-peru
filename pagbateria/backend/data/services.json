@@ -1,0 +1,26 @@
+{
+  "auxilio": {
+    "title": "Auxilio a domicilio",
+    "description": "Tu auto no arranca y estás varado. Llegamos con la batería correcta y la instalamos ahí mismo."
+  },
+  "instalacion": {
+    "title": "Instalación a domicilio",
+    "description": "Sin costo aparte. El técnico instala, verifica el arranque y se lleva la batería usada."
+  },
+  "diagnostico": {
+    "title": "Diagnóstico de carga",
+    "description": "A veces el problema no es la batería sino el alternador. Lo medimos antes de venderte una nueva."
+  },
+  "bms": {
+    "title": "Reprogramación BMS",
+    "description": "Para vehículos de gama alta. Escáner OBD2 incluido, sin cargo adicional."
+  },
+  "reciclaje": {
+    "title": "Reciclaje del casco",
+    "description": "Entregas la usada, descuentas S/ 40 y nosotros la disponemos como corresponde."
+  },
+  "flotas": {
+    "title": "Flotas y empresas",
+    "description": "Mantenimiento programado para flotas. Cotización según cantidad de unidades."
+  }
+}

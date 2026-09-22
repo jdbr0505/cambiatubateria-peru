@@ -1,0 +1,15 @@
+{
+  "distritosTitulo": "Cobertura confirmada",
+  "distritosBajada": "¿No ves el tuyo? Llámanos igual: coordinamos según disponibilidad.",
+  "horariosTitulo": "Atendemos siempre",
+  "horarioResumenTitulo": "Lunes a domingo, incluidos feriados",
+  "horarioResumenTexto": "La mayoría de baterías fallan de madrugada o a primera hora, que es cuando nadie más contesta.",
+  "faqPregunta": "¿Atienden de madrugada?",
+  "faqRespuesta": "Sí. Con menos tráfico solemos llegar antes que en hora punta.",
+  "zonas": [
+    { "nombre": "Lima Moderna", "distritos": ["San Isidro", "Miraflores", "Surco", "La Molina", "San Borja", "Barranco", "Surquillo", "Chorrillos"] },
+    { "nombre": "Lima Centro", "distritos": ["Cercado de Lima", "Jesús María", "Lince", "Breña", "Magdalena", "Pueblo Libre", "San Miguel", "Rímac", "La Victoria", "San Luis"] },
+    { "nombre": "Lima Norte", "distritos": ["Los Olivos"] },
+    { "nombre": "Callao", "distritos": ["Callao"] }
+  ]
+}

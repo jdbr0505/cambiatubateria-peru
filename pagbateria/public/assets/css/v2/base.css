@@ -1,0 +1,162 @@
+/* ============================================================================
+ * BASE — reset y comportamiento de elementos HTML.
+ * Requiere tokens.css cargado antes.
+ * ========================================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+/* --- Contenido editable desde el panel: oculto hasta que carga el valor real ---
+ * Sin esto, cada carga pinta primero el texto/foto por defecto horneado en el
+ * HTML y, si el panel tiene un valor distinto, un instante después se ve el
+ * reemplazo en vivo — un parpadeo notorio de "versión vieja → versión nueva"
+ * que delata que el sitio se editó recién. main.js pone data-contenido-listo
+ * en <html> recién cuando los módulos de mejora progresiva (hero, cabeceras,
+ * servicios, nosotros, fotos de página, tira de marcas, correo de contacto)
+ * ya intentaron aplicar el valor real — con éxito o no, ver la función
+ * revelarContenidoEditable().
+ *
+ * visibility:hidden, no display:none: el elemento sigue ocupando su espacio,
+ * así que no hay salto de maquetación (CLS) cuando se revela.
+ *
+ * [data-foto-slug="hero"] (la foto de portada de Inicio, elemento LCP) se
+ * ocultaba aparte para no perjudicar el FCP — pedido explícito del jefe: el
+ * parpadeo seguía viéndose ahí también, así que ahora se oculta igual que el
+ * resto. El costo es un FCP un poco más tarde en Inicio (la foto espera al
+ * fetch de pagina_fotos.php, normal <300ms con la BD viva); el jefe prefirió
+ * eso a seguir viendo la foto vieja destellar antes de la nueva.
+ *
+ * Excluye data-marca-rol / data-whatsapp-role a propósito (no listados acá):
+ * nombre de marca y número de WhatsApp aparecen en TODAS las páginas (nav,
+ * pie, ~80 links) y se editan una sola vez en la vida del sitio — ocultarlos
+ * ahí costaría rendimiento en cada visita para arreglar un parpadeo que casi
+ * nadie llega a ver. */
+:root:not([data-contenido-listo]) [data-hero-rol],
+:root:not([data-contenido-listo]) [data-cabecera-rol],
+:root:not([data-contenido-listo]) [data-servicio-slug],
+:root:not([data-contenido-listo]) [data-nosotros-rol],
+:root:not([data-contenido-listo]) [data-foto-slug],
+:root:not([data-contenido-listo]) [data-testid="marcas-list"],
+:root:not([data-contenido-listo]) [data-contacto-rol="email-texto"],
+:root:not([data-contenido-listo]) [data-cobertura-rol],
+:root:not([data-contenido-listo]) [data-testid="distritos"] {
+  visibility: hidden;
+}
+/* [data-contacto-rol="email-link"] queda afuera a propósito: solo cambia el
+ * href (mailto:), no hay texto visible que parpadee — mismo criterio que
+ * data-whatsapp-role. */
+/* Sin JavaScript no hay quien ponga data-contenido-listo: el <noscript> de
+ * cada página trae la contra-regla que revela todo de una — ver el <head>
+ * de cada .html. Un selector CSS normal no puede detectar "sin JS" por sí
+ * solo, <noscript><style> es el único mecanismo real del navegador. */
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  color: var(--ink-900);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Manrope tiene cifras tabulares opcionales: en precios y datos técnicos
+     evitan que los números "bailen" al actualizarse. */
+  font-variant-numeric: tabular-nums;
+  /* Evita el desplazamiento horizontal accidental en móvil: el defecto
+     visual más frecuente y el más fácil de pasar por alto. */
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 800;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  /* Reparte las líneas de un titular de forma pareja en vez de dejar una
+     palabra huérfana en la última línea. */
+  text-wrap: balance;
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+}
+
+p {
+  margin: 0;
+  /* Evita líneas finales de una sola palabra en párrafos. */
+  text-wrap: pretty;
+}
+
+img, svg, video { display: block; max-width: 100%; height: auto; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+/* El anillo de foco solo aparece con teclado: no estorba al tocar con el
+   dedo, pero sigue disponible para quien navega con Tab. */
+:focus-visible {
+  outline: 3px solid var(--brand-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Etiqueta en versalitas: el recurso tipográfico que más eleva la percepción
+   de calidad por línea de CSS escrita. */
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  /* energy-600, no energy-400: el rojo claro sobre papel no alcanza el
+     mínimo AA de 4.5:1. Sobre fondo oscuro sí se usa el claro (energy-300,
+     ver .section--dark .eyebrow en layout.css). */
+  color: var(--energy-600);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Enlace de salto: invisible con el ratón, pero DEBE aparecer al llegar con
+   Tab. Sin esta regla el enlace existe en el HTML y nunca se puede usar, que
+   es peor que no tenerlo: da falsa sensación de accesibilidad. */
+.visually-hidden:focus,
+.visually-hidden:focus-visible {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: calc(var(--z-toast) + 1);
+  width: auto; height: auto;
+  min-height: var(--touch-min);
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: var(--space-3) var(--space-5);
+  clip-path: none;
+  overflow: visible;
+  background: var(--brand-900);
+  color: var(--paper);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

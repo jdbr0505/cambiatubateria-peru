@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Battery Platinum AGM H8",
+    "brand": "Varta",
+    "price": 6990,
+    "cca": 800,
+    "capacity": 95,
+    "type": "AGM H8",
+    "dimensions": { "length": 315, "width": 175, "height": 190 },
+    "weightKg": 27.5,
+    "polarity": "+ -",
+    "coreDiscount": 300,
+    "coreDiscountTexto": "entregando tu batería usada",
+    "description": "Batería AGM Varta H8 de alto desempeño para SUVs premium.",
+    "compatibility": ["BMW X5", "Audi Q7", "Mercedes GLE", "Porsche Cayenne"]
+  },
+  {
+    "id": 2,
+    "name": "Battery Platinum AGM H6",
+    "brand": "Bosch",
+    "price": 5490,
+    "cca": 760,
+    "capacity": 70,
+    "type": "AGM H6",
+    "dimensions": { "length": 278, "width": 175, "height": 190 },
+    "weightKg": 22.3,
+    "polarity": "+ -",
+    "coreDiscount": 300,
+    "coreDiscountTexto": "entregando tu batería usada",
+    "description": "Bosch AGM H6 con excelente relación CCA/Capacidad.",
+    "compatibility": ["Audi A4", "BMW Serie 3", "Mercedes C200", "Mini Cooper"]
+  },
+  {
+    "id": 3,
+    "name": "Battery Racing Li-Ion",
+    "brand": "Optima",
+    "price": 9990,
+    "cca": 900,
+    "capacity": 60,
+    "type": "Litio Racing",
+    "dimensions": { "length": 240, "width": 170, "height": 190 },
+    "weightKg": 12.1,
+    "polarity": "- +",
+    "coreDiscount": 0,
+    "coreDiscountTexto": "entregando tu batería usada",
+    "description": "Batería de litio ultraligera para alto rendimiento.",
+    "compatibility": ["Ferrari 488", "Lamborghini Huracán", "Porsche 911"]
+  }
+]

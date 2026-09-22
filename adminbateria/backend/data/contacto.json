@@ -1,0 +1,10 @@
+{
+    "values": [],
+    "labels": {
+        "address": "Ubicación",
+        "phone": "Teléfonos",
+        "email": "Correo",
+        "ruc": "RUC",
+        "schedule": "Horario"
+    }
+}

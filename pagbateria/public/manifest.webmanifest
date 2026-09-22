@@ -1,0 +1,50 @@
+{
+  "name": "CambiaTuBatería Perú",
+  "short_name": "CambiaTuBatería",
+  "description": "Batería a domicilio 24/7 en Lima y Callao. Auxilio en 30 minutos.",
+  "lang": "es-PE",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F0F10",
+  "theme_color": "#0F0F10",
+  "categories": ["business", "utilities"],
+  "icons": [
+    {
+      "src": "assets/img/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Auxilio inmediato",
+      "short_name": "Auxilio",
+      "description": "Enviar mi ubicación por WhatsApp",
+      "url": "./index.html?accion=auxilio",
+      "icons": [{ "src": "assets/img/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Llamar ahora",
+      "short_name": "Llamar",
+      "description": "Llamar a la central 24 horas",
+      "url": "./contacto.html",
+      "icons": [{ "src": "assets/img/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

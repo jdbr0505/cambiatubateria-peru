@@ -1,0 +1,19 @@
+{
+    "address": "asdasd",
+    "mapUrl": "asdasd",
+    "phone": "asdasd",
+    "email": "dasdas",
+    "ruc": "dasdas",
+    "schedule": {
+        "weekdays": "dasd",
+        "saturday": "asdasd",
+        "sunday": "asdsa"
+    },
+    "labels": {
+        "address": "Ubicación",
+        "phone": "Teléfonos",
+        "email": "Correo",
+        "ruc": "RUC",
+        "schedule": "Horario"
+    }
+}

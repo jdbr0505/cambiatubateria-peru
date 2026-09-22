@@ -1,0 +1,11 @@
+# Datos internos: log de contactos (con IPs y mensajes de clientes) y los
+# archivos de rate-limit. Nada aquí debe ser accesible por HTTP: sería una
+# fuga de datos personales. La raíz del proyecto es el DocumentRoot, así que
+# sin esta regla https://dominio/pagbateria/backend/data/contacts.log se sirve.
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>

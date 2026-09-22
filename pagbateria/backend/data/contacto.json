@@ -1,0 +1,26 @@
+{
+  "values": {
+    "address": null,
+    "mapUrl": null,
+    "phone": "+51 936 956 877",
+    "email": "contacto@cambiatubateriaperu.com",
+    "ruc": null,
+    "schedule": {
+      "weekdays": "Todos los días, incluidos feriados",
+      "saturday": "Todos los días, incluidos feriados",
+      "sunday": "Todos los días, incluidos feriados"
+    }
+  },
+  "labels": {
+    "address": "Dirección",
+    "map": "URL de Mapa",
+    "phone": "Teléfonos",
+    "email": "Correo",
+    "ruc": "RUC",
+    "schedule": "Horario",
+    "weekdays": "Horario L–V",
+    "saturday": "Horario Sábado",
+    "sunday": "Horario Domingo"
+  },
+  "description": ""
+}

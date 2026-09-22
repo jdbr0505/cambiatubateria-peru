@@ -1,0 +1,545 @@
+/* ============================================================================
+ * LAYOUT — contenedores, secciones, rejilla, pie de página.
+ * Requiere tokens.css cargado antes.
+ * ========================================================================= */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  /* El padding respeta el notch en móviles con pantalla curva. */
+  padding-inline: max(var(--space-5), env(safe-area-inset-left));
+}
+
+.container--narrow { max-width: var(--container-narrow); }
+
+/* Ancla el borde izquierdo del contenedor al viewport real en vez de
+ * centrarlo — pedido del jefe: logo/navbar (aparecen en las 10 páginas) y el
+ * hero de Inicio deben verse a la misma distancia del borde en cualquier
+ * ancho de pantalla. .container solo centra (margin-inline:auto); en
+ * monitores anchos eso deja ~370px de hueco a la izquierda del logo, muy
+ * distinto del padding chico en móvil — y descuadrado contra el hero, que ya
+ * no se centra (ver .hero__media-inner). No se aplica a TODA sección con
+ * .container: los bloques deliberadamente centrados (CTA final, cabeceras
+ * de página) siguen centrándose como siempre — solo nav/topbar/hero, que
+ * son los que el jefe señaló como desalineados. */
+.container--flush-left { margin-inline: 0 auto; }
+
+/* Ritmo vertical de sección. El espacio generoso es lo que separa un sitio
+   premium de uno apretado: el aire comunica confianza. */
+/* Cualquier ancla (#auxilio, #horarios, #callao...) necesita margen para la
+   barra fija: sin esto, saltar a un id deja su título tapado a medias detrás
+   del nav. La barra mide más alto en móvil (dos filas: marca + buscador) que
+   en escritorio (una sola fila), así que el margen difiere por breakpoint —
+   el mismo 1200px donde nav.css pasa la barra a una sola fila (ver ese
+   archivo para el porqué de ese número); si se desincronizan, el salto de
+   ancla queda corto o largo en el rango donde uno cambió y el otro no. */
+[id] { scroll-margin-top: 7.5rem; }
+@media (min-width: 1200px) {
+  [id] { scroll-margin-top: 5rem; }
+}
+
+.section { padding-block: var(--space-16); }
+
+@media (min-width: 768px) {
+  .section { padding-block: var(--space-24); }
+}
+
+.section--tight { padding-block: var(--space-12); }
+
+.section--dark {
+  background: var(--brand-950);
+  color: var(--paper);
+}
+
+.section--dark .eyebrow { color: var(--energy-300); }
+
+.section--muted { background: var(--paper-2); }
+
+/* --- Cabecera de sección --------------------------------------------------- */
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 44ch;   /* medida legible: más ancho cansa la lectura */
+  margin-bottom: var(--space-10);
+}
+
+.section-head__title {
+  font-size: var(--text-2xl);
+}
+
+@media (min-width: 768px) {
+  .section-head__title { font-size: var(--text-3xl); }
+}
+
+.section-head__lead {
+  font-size: var(--text-lg);
+  color: var(--ink-600);
+  letter-spacing: var(--tracking-snug);
+  /* El panel ya deja escribir párrafos largos acá (textarea, no input) — sin
+     esto, los saltos de línea que el jefe tipeó se colapsan en un solo
+     bloque corrido (comportamiento normal de white-space). pre-line respeta
+     los saltos de línea/párrafo tal como se escribieron, sin dejar de
+     colapsar espacios de más ni de ajustar el texto al ancho disponible. */
+  white-space: pre-line;
+}
+
+.section--dark .section-head__lead { color: var(--brand-200); }
+
+/* Centrar de verdad. `style="text-align:center"` suelto centraba el texto
+   DENTRO de una caja de 44ch que seguía pegada a la izquierda del contenedor:
+   se veía descuadrado, que es justo lo que se reportó. Hace falta además
+   centrar la caja (margin-inline) y sus hijos (align-items). */
+.section-head--center {
+  margin-inline: auto;
+  align-items: center;
+  text-align: center;
+}
+
+/* Para cabeceras que cargan un párrafo largo de verdad (ej. la descripción
+   del negocio en Nosotros, editable como texto largo desde el panel) — los
+   44ch base están pensados para un lead corto de una o dos líneas, no para
+   un párrafo de varias oraciones: con ese tope se ve angosto y con mucho
+   espacio vacío debajo de la foto contigua. 60ch sigue dentro del rango
+   legible (50-75 caracteres por línea) pero usa el ancho real que la
+   columna del grid le da. */
+.section-head--ancho {
+  max-width: 60ch;
+}
+
+/* Acción que cierra una sección (típicamente "Ver todo el catálogo"). */
+.section-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-10);
+}
+
+/* --- Rejilla ---------------------------------------------------------------
+ * auto-fit + minmax: las columnas se reacomodan solas sin escribir un
+ * breakpoint por cada tamaño.
+ * ------------------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.grid--cards {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+}
+
+.grid--halves {
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+
+@media (min-width: 900px) {
+  .grid--halves {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  /* Misma fila, pero el texto pesa más que la foto — para la sección "El
+     equipo" de Nosotros, cuya bajada es la descripción larga del negocio,
+     no un lead corto. 50/50 la dejaba angosta y con hueco vacío bajo la
+     foto porque el párrafo es más alto que ancho. */
+  .grid--halves-texto {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+/* --- Pie de página --------------------------------------------------------- */
+
+.footer {
+  background: var(--brand-950);
+  color: var(--brand-200);
+  padding-block: var(--space-16) var(--space-8);
+  font-size: var(--text-sm);
+}
+
+/* Móvil: marca y redes centradas en columna — alineadas a la izquierda se
+   veían sueltas y pobres. En tablet+ vuelve a marca-izquierda / redes-derecha. */
+.footer__top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-bottom: var(--space-10);
+  margin-bottom: var(--space-10);
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+}
+
+@media (min-width: 768px) {
+  .footer__top {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--paper);
+}
+
+.footer__logo {
+  height: 40px;
+  width: auto;
+  padding: 6px 9px;
+  border-radius: var(--radius-sm);
+  background: var(--energy-400);
+}
+
+.footer__brand-text { font-family: var(--font-display); font-weight: 800; font-size: var(--text-lg); }
+.footer__brand-text em { font-style: normal; color: var(--energy-300); }
+
+.footer__social { display: inline-flex; gap: var(--space-3); }
+
+/* Íconos de red social: círculo con glifo claro que vira a rojo al pasar. */
+.footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border-radius: var(--radius-full);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  color: var(--brand-200);
+  transition: color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard), background-color var(--duration-fast) var(--ease-standard);
+}
+
+.footer__social-link svg { width: 1.25rem; height: 1.25rem; }
+
+/* Texto blanco, no oscuro: el rojo sólido de fondo no da contraste
+   suficiente para un ícono oscuro encima (ver la nota de la escala en
+   tokens.css). */
+.footer__social-link:hover {
+  color: var(--paper);
+  background: var(--energy-400);
+  border-color: var(--energy-400);
+}
+
+/* Móvil: dos columnas de enlaces centradas, no una sola tira pegada a la
+   izquierda. En tablet+ se reparte fluido con auto-fit. */
+.footer__grid {
+  display: grid;
+  gap: var(--space-8) var(--space-6);
+  grid-template-columns: repeat(2, 1fr);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer__grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    text-align: left;
+  }
+}
+
+/* El logo de WhatsApp junto al texto, en los enlaces que lo mencionan. */
+.footer__list svg,
+.btn svg { width: 1.15em; height: 1.15em; flex-shrink: 0; }
+.footer__list svg { color: var(--whatsapp); }
+
+.footer__title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-bottom: var(--space-3);
+}
+
+/* justify-items centra los enlaces (inline-flex) dentro de cada columna en
+   móvil; en tablet+ se alinean a la izquierda bajo su título. */
+.footer__list { list-style: none; margin: 0; padding: 0; display: grid; justify-items: center; }
+
+@media (min-width: 768px) {
+  .footer__list { justify-items: start; }
+}
+
+/* min-height lleva los enlaces al objetivo táctil de 44px. */
+.footer__list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min);
+  text-decoration: none;
+}
+
+.footer__list a:hover { color: var(--energy-300); text-decoration: underline; }
+
+.footer__legal {
+  margin-top: var(--space-12);
+  padding-top: var(--space-6);
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  /* Móvil: bloque legal centrado en columna. En tablet+ copyright a un lado,
+     enlaces al otro. */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--ink-400);
+  font-size: var(--text-xs);
+}
+
+@media (min-width: 768px) {
+  .footer__legal {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.footer__legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  align-items: center;
+  justify-content: center;
+}
+
+.footer__legal-links a {
+  color: var(--brand-200);
+  text-decoration: none;
+  min-height: var(--touch-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer__legal-links a:hover { color: var(--energy-300); text-decoration: underline; }
+
+/* --- Páginas legales (prosa) ------------------------------------------------ */
+.legal { color: var(--ink-800); line-height: var(--leading-body); }
+.legal h2 { font-family: var(--font-display); font-size: var(--text-xl); color: var(--brand-900); margin: var(--space-8) 0 var(--space-3); }
+.legal h3 { font-size: var(--text-lg); color: var(--brand-900); margin: var(--space-6) 0 var(--space-2); }
+.legal p, .legal li { margin-bottom: var(--space-3); }
+.legal ul { padding-left: var(--space-6); }
+.legal a { color: var(--energy-600); }
+.legal__update { color: var(--ink-500); font-size: var(--text-sm); margin-bottom: var(--space-6); }
+/* Marca un dato que el negocio debe rellenar antes de publicar. */
+.legal__ph { background: var(--energy-100); color: var(--energy-600); padding: 0 var(--space-1); border-radius: var(--radius-sm); font-weight: 700; }
+
+/* Libro de Reclamaciones: obligatorio por Indecopi, visible en el pie. */
+.footer__reclamaciones {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-min);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--paper);
+}
+
+.footer__reclamaciones:hover { border-color: var(--energy-300); }
+
+/* --- Botones flotantes de contacto ------------------------------------------
+ * Siempre visibles, en todas las páginas, sin depender del scroll: el patrón
+ * que ya conoce cualquiera que haya comprado algo por WhatsApp en Perú.
+ * Reemplaza la barra inferior que antes solo aparecía en móvil, solo en
+ * index.html, y solo después de que el CTA del hero saliera de pantalla.
+ * ------------------------------------------------------------------------- */
+
+.floating-cta {
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: var(--z-sticky);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.floating-cta__btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xl);
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+.floating-cta__btn svg { width: 1.6rem; height: 1.6rem; }
+.floating-cta__btn:hover { transform: translateY(-2px) scale(1.05); }
+.floating-cta__btn:active { transform: scale(0.96); }
+
+/* Con 2+ asesores configurados, whatsapp-asesores.js convierte el <a> en un
+   <button> (abre el selector en vez de navegar) — reset para que un <button>
+   con esta clase se vea idéntico al <a> de siempre, sin borde ni relleno de
+   navegador de por medio. */
+.floating-cta__btn {
+  border: none;
+  appearance: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.floating-cta__btn--whatsapp { background: var(--whatsapp); color: var(--paper); }
+.floating-cta__btn--llamar { background: var(--brand-800); color: var(--paper); }
+.floating-cta__btn--llamar:hover { background: var(--brand-900); }
+
+/* En móvil sigue siendo el círculo de siempre — ahí cada pixel de pantalla
+   cuenta. La etiqueta solo se muestra donde sí hay espacio de sobra. */
+.floating-cta__label { display: none; }
+
+/* --- Selector de asesores de WhatsApp ---------------------------------------
+ * Solo existe en el DOM cuando el panel tiene 2+ asesores configurados
+ * (whatsapp-asesores.js). Flota justo encima del botón de WhatsApp, mismo
+ * lado derecho que .floating-cta — position:fixed para no meterse en el
+ * flujo flex de esos botones.
+ * ------------------------------------------------------------------------- */
+.wa-asesores {
+  position: fixed;
+  right: var(--space-4);
+  /* Encima de los dos botones flotantes (llamar + whatsapp) + su gap +
+     un respiro propio. Ver el cálculo en el comentario del módulo JS. */
+  bottom: calc(9rem + env(safe-area-inset-bottom));
+  z-index: var(--z-overlay);
+  width: min(320px, calc(100vw - 2 * var(--space-4)));
+  max-height: min(70vh, 24rem);
+  overflow-y: auto;
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  /* Misma entrada breve que el resto de paneles flotantes del sitio: nace
+     un poco abajo y con opacidad 0, sube y aparece. */
+  animation: wa-asesores-in var(--duration-base) var(--ease-out-strong);
+}
+
+@keyframes wa-asesores-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wa-asesores__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--whatsapp);
+  color: var(--paper);
+}
+.wa-asesores__header > svg { width: 1.75rem; height: 1.75rem; flex-shrink: 0; }
+.wa-asesores__header-texto { display: flex; flex-direction: column; line-height: 1.3; }
+.wa-asesores__header-texto strong { font-size: var(--text-base); }
+.wa-asesores__header-texto span { font-size: var(--text-xs); opacity: 0.9; }
+
+.wa-asesores__cerrar {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 0.2);
+  color: var(--paper);
+  font-size: var(--text-lg);
+  line-height: 1;
+  cursor: pointer;
+}
+.wa-asesores__cerrar:hover { background: rgb(255 255 255 / 0.32); }
+
+.wa-asesores__lista { list-style: none; margin: 0; padding: var(--space-2); }
+
+.wa-asesores__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  min-height: var(--touch-min);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+.wa-asesores__item:hover { background: var(--paper-2); }
+
+.wa-asesores__avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  background: var(--brand-100);
+  color: var(--brand-800);
+  font-weight: 700;
+  font-size: var(--text-sm);
+}
+
+.wa-asesores__info { display: flex; flex-direction: column; flex: 1; min-width: 0; line-height: 1.3; }
+.wa-asesores__info strong { font-size: var(--text-sm); color: var(--ink-900); }
+.wa-asesores__info small { font-size: var(--text-xs); color: var(--ink-500); }
+
+.wa-asesores__icono { flex-shrink: 0; color: var(--whatsapp); }
+.wa-asesores__icono svg { width: 1.25rem; height: 1.25rem; }
+
+@media (min-width: 768px) {
+  /* Con más espacio, el botón de WhatsApp suma una etiqueta de texto junto
+     al ícono: es el CTA que más convierte y en escritorio no hay razón para
+     que sea solo un glifo sin explicar qué hace. */
+  .floating-cta__btn--whatsapp {
+    width: auto;
+    padding-inline: var(--space-5);
+    gap: var(--space-2);
+  }
+  .floating-cta__label {
+    display: inline;
+    font-weight: 700;
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    /* Blanco sobre el verde de WhatsApp da ~2:1 — muy por debajo del 4.5:1
+       que exige AA para texto (auditoría axe-core). El ícono se queda blanco
+       (currentColor, hereda de .floating-cta__btn--whatsapp) — es el look
+       reconocible de WhatsApp y un ícono no lleva el mismo requisito de
+       contraste que el texto; solo la etiqueta necesita este color propio. */
+    color: var(--ink-900);
+  }
+}
+
+/* Un único anillo de pulso, solo en WhatsApp: el gesto que invita al primer
+   toque sin sumar movimiento por todas partes. */
+.floating-cta__btn--whatsapp::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--whatsapp);
+  animation: floating-cta-pulse 2.4s var(--ease-standard) infinite;
+}
+
+@keyframes floating-cta-pulse {
+  0%   { opacity: 0.55; scale: 1; }
+  100% { opacity: 0; scale: 1.45; }
+}
+
+[data-testid="sticky-cta"].hidden {
+  /* Sigue en el compositor (no display:none) para animar la salida con
+     translateY(100%); grid, no flex, para no reacomodar columnas al deslizar. */
+  display: grid !important;
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}

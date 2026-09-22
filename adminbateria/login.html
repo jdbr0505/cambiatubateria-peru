@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Login - CambiaTuBateria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Libre+Franklin:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/adminbateria/assets/css/styles.css?v=6" />
+
+  <style>
+    :root{
+      --bg:#F8FAFC; --card:#fff; --text:#0B1220; --muted:#64748B; --line:#E2E8F0;
+      --primary:#C1272D; --primary-600:#7A1519; --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{
+      height:100%; margin:0; background:var(--bg); color:var(--text);
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      -webkit-text-size-adjust:100%; /* evita zoom automatico en iOS */
+    }
+
+    /* ====== ESCRITORIO (por defecto): centrado exacto ====== */
+    .page-center{
+      position:fixed; inset:0;
+      display:grid; place-items:center;       /* centro X/Y */
+      padding:24px;
+      overflow:auto;                          /* si crece, scroll sin descentrar */
+      background:var(--bg);
+    }
+    @supports (height: 100svh){ .page-center{ min-height:100svh; } }
+
+    .login-card{
+      background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:0 14px 36px rgba(2,6,23,.08);
+      width:100%; max-width:440px; padding:26px 22px;
+    }
+
+    .logo-wrap{display:flex; justify-content:center; margin-bottom:18px;}
+    .logo{ width:100%; height:auto; object-fit:contain; max-width:320px; max-height:160px; }
+
+    h1{font-size:28px; margin:0 0 8px; text-align:center;}
+    .muted{color:var(--muted); font-size:14px; text-align:center; margin:0 0 16px; display:block;}
+
+    label{display:block; font-size:14px; font-weight:600; margin:10px 0 6px;}
+    /* 16px para evitar zoom en iOS */
+    input{
+      width:100%; font-size:16px; line-height:1.2;
+      border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:#fff;
+    }
+    input:focus{outline:2px solid rgba(193,39,45,.25); border-color:var(--primary)}
+
+    .actions{display:flex; justify-content:flex-end; margin-top:12px}
+    .btn{
+      appearance:none; border:0; border-radius:12px; padding:12px 18px;
+      font-weight:600; font-size:16px; cursor:pointer;
+      background:var(--primary); color:#fff;
+    }
+    .btn:hover{background:var(--primary-600)}
+    .status{margin-top:10px; font-size:14px; color:var(--muted); text-align:center;}
+    .status.err{color:#ef4444}
+
+    /* ====== SOLO CELULAR: tarjeta arriba (no centrada) ====== */
+    @media (max-width: 640px){
+      .page-center{
+        position:static;            /* deja que el viewport se ajuste con el teclado */
+        display:block;              /* comportamiento normal de documento */
+        padding:18px 14px;          /* respiracion lateral */
+        min-height:100dvh;          /* asegura alto en moles modernos */
+      }
+      .login-card{
+        margin:10px auto 0;         /* arriba con un pequeñomargen */
+        padding:22px 18px;
+      }
+      .logo{ max-width:360px; max-height:180px; }  /* logo un poco magrande en movil */
+    }
+  </style>
+</head>
+<body>
+  <div class="page-center">
+    <div class="login-card">
+      <div class="logo-wrap">
+        <img id="loginLogo" class="logo" alt="CambiaTuBatería" src="/pagbateria/public/assets/img/icons/nav-logo.png">
+      </div>
+
+      <h1 style="font-family:'Libre Franklin', 'Manrope', sans-serif">Acceso</h1>
+      <small class="muted">Ingresa tus credenciales para continuar.</small>
+
+      <label for="lgUser">Usuario</label>
+      <input id="lgUser" type="text" autocomplete="username" inputmode="text" />
+
+      <label for="lgPass">Contraseña</label>
+      <input id="lgPass" type="password" autocomplete="current-password" inputmode="text" />
+
+      <div class="actions">
+        <button class="btn" id="lgBtn" type="button">Ingresar</button>
+      </div>
+
+      <div id="lgStatus" class="status"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = '/adminbateria/backend/api';
+
+    async function post(path, body){
+      const r = await fetch(API_BASE + path, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(body)
+      });
+      const j = await r.json().catch(()=>({}));
+      if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
+      return j;
+    }
+
+    // El logo del panel es fijo (nav-logo.png, el emblema negro de la marca):
+    // ya no se toma de logoFile. Ese campo configura el logo del sitio PÚBLICO,
+    // que puede ser otro; la marca del propio panel de administración no debe
+    // depender de eso ni cambiar sola.
+
+    // Enviar login
+    function submitLogin(){
+      const st = document.getElementById('lgStatus');
+      st.textContent = 'Validando...'; st.className = 'status';
+      post('/login.php', {
+        username: document.getElementById('lgUser').value.trim(),
+        password: document.getElementById('lgPass').value
+      })
+      .then(() => { location.href = '/adminbateria/'; })
+      .catch(e => { st.textContent = e.message || 'Error'; st.className = 'status err'; });
+    }
+    document.getElementById('lgBtn').addEventListener('click', submitLogin);
+    document.getElementById('lgPass').addEventListener('keypress', e => {
+      if (e.key === 'Enter') submitLogin();
+    });
+  </script>
+</body>
+</html>
